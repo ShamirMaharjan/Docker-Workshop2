@@ -100,26 +100,27 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                
+        
                 <DragDropContext onDragEnd={onDragEnd}>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="bg-gray-100/50 p-4 rounded-2xl border border-gray-200/60">
-                        <h2 className="font-bold text-gray-700 mb-4 flex justify-between items-center">
-                            Stashed
-                            <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">
-                                {filteredTasks.filter(t => t.status === 'stashed').length}
-                            </span>
-                        </h2>
-                        <Droppable droppableId="stashed">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        
+                        <div className="bg-gray-100/50 p-4 rounded-2xl border border-gray-200/60 flex flex-col">
+                            <h2 className="font-bold text-gray-700 mb-4 flex justify-between items-center">
+                                Stashed
+                                <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">
+                                    {filteredTasks.filter(t => t.status === 'stashed').length}
+                                </span>
+                            </h2>
+                            <Droppable droppableId="stashed">
                                 {(provided, snapshot) => (
-                                    <div
-                                        {...provided.droppableProps}
+                                    <div 
+                                        {...provided.droppableProps} 
                                         ref={provided.innerRef}
                                         className={`flex-1 space-y-4 min-h-[200px] transition-colors rounded-xl ${snapshot.isDraggingOver ? 'bg-gray-200/50' : ''}`}
                                     >
                                         {filteredTasks.filter(t => t.status === 'stashed').map((task, index) => (
-                                            <Draggable key={task._id} draggableId={task._id} index={index}>
-                                                ${(provided, snapshot) => (
+                                            <Draggable key={String(task._id)} draggableId={String(task._id)} index={index}>
+                                                {(provided, snapshot) => (
                                                     <div
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
@@ -133,27 +134,27 @@ export default function Dashboard() {
                                         ))}
                                         {provided.placeholder}
                                     </div>
-                            )}  
-                        </Droppable>
-                    </div>
+                                )}
+                            </Droppable>
+                        </div>
 
-                    <div className="bg-blue-50/50 p-4 rounded-2xl border border-blue-100">
-                        <h2 className="font-bold text-blue-800 mb-4 flex justify-between items-center">
-                            Focus
-                            <span className="bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full text-xs">
-                                {filteredTasks.filter(t => t.status === 'focus').length}
-                            </span>
-                        </h2>
-                        <Droppable droppableId="focus">
+                        <div className="bg-blue-50/50 p-4 rounded-2xl border border-blue-100 flex flex-col">
+                            <h2 className="font-bold text-blue-800 mb-4 flex justify-between items-center">
+                                Active
+                                <span className="bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full text-xs">
+                                    {filteredTasks.filter(t => t.status === 'active').length}
+                                </span>
+                            </h2>
+                            <Droppable droppableId="active">
                                 {(provided, snapshot) => (
-                                    <div
-                                        {...provided.droppableProps}
+                                    <div 
+                                        {...provided.droppableProps} 
                                         ref={provided.innerRef}
                                         className={`flex-1 space-y-4 min-h-[200px] transition-colors rounded-xl ${snapshot.isDraggingOver ? 'bg-blue-100/50' : ''}`}
                                     >
-                                        {filteredTasks.filter(t => t.status === 'focus').map((task, index) => (
-                                            <Draggable key={task._id} draggableId={task._id} index={index}>
-                                                ${(provided, snapshot) => (
+                                        {filteredTasks.filter(t => t.status === 'active').map((task, index) => (
+                                            <Draggable key={String(task._id)} draggableId={String(task._id)} index={index}>
+                                                {(provided, snapshot) => (
                                                     <div
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
@@ -167,30 +168,29 @@ export default function Dashboard() {
                                         ))}
                                         {provided.placeholder}
                                     </div>
-                                
-                            )}  
-                        </Droppable>
-                    </div>
+                                )}
+                            </Droppable>
+                        </div>
 
-                    <div className="bg-gray-100/50 p-4 rounded-2xl border border-gray-200/60 opacity-70">
-                        <h2 className="font-bold text-gray-500 mb-4 flex justify-between items-center">
-                            Cleared
-                            <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">
-                                {filteredTasks.filter(t => t.status === 'cleared').length}
-                            </span>
-                        </h2>
-                        <Droppable droppableId="cleared">
+                        <div className="bg-gray-100/50 p-4 rounded-2xl border border-gray-200/60 flex flex-col opacity-70 hover:opacity-100 transition-opacity">
+                            <h2 className="font-bold text-gray-500 mb-4 flex justify-between items-center">
+                                Cleared
+                                <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">
+                                    {filteredTasks.filter(t => t.status === 'cleared').length}
+                                </span>
+                            </h2>
+                            <Droppable droppableId="cleared">
                                 {(provided, snapshot) => (
-                                    <div
-                                        {...provided.droppableProps}
+                                    <div 
+                                        {...provided.droppableProps} 
                                         ref={provided.innerRef}
                                         className={`flex-1 space-y-4 min-h-[200px] transition-colors rounded-xl ${snapshot.isDraggingOver ? 'bg-gray-200/50' : ''}`}
                                     >
                                         {filteredTasks.filter(t => t.status === 'cleared').map((task, index) => (
-                                            <Draggable key={task._id} draggableId={task._id} index={index}>
-                                                ${(provided, snapshot) => (
+                                            <Draggable key={String(task._id)} draggableId={String(task._id)} index={index}>
+                                                {(provided, snapshot) => (
                                                     <div
-                                                        ref={provided.draggableProps}
+                                                        ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
                                                         className={snapshot.isDragging ? 'opacity-80 rotate-2 scale-105 transition-transform' : ''}
@@ -202,11 +202,11 @@ export default function Dashboard() {
                                         ))}
                                         {provided.placeholder}
                                     </div>
-                            )}  
-                        </Droppable>
-                    </div>
+                                )}
+                            </Droppable>
+                        </div>
 
-                </div>
+                    </div>
                 </DragDropContext>
             </main>
         </div>
