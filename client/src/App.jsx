@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
-import { NotificationProvider } from './context/notificationContext';
+import { NotificationProvider } from './context/NotificationContext';
 import NotificationToast from './components/NotificationToast';
 import { useContext } from 'react';
 import Auth from './pages/Auth'

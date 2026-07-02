@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNotification } from '../context/NotificationContext';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5000/api',
+    baseURL: import.meta.env.VITE_API_URL,
     withCredentials: true 
 });
 
@@ -17,7 +17,7 @@ export const useTasks = () => {
             const res = await api.get('/tasks');
             setTasks(res.data);
         } catch (error) {
-            showNotification('Failed to load tasks', 'error');
+            showNotification('Failed to load tasks', 'error', error);
         } finally {
             setLoading(false);
         }
