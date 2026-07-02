@@ -40,7 +40,7 @@ export default function Auth() {
                         {isLogin ? 'Welcome Back' : 'Create an Account'}
                     </h2>
                     <p className="text-gray-500 text-sm">
-                        {isLogin ? 'Log in to manage your tasks.' : 'Join to start organizing your pipeline.'}
+                        {isLogin ? 'Log in to manage your tasks.' : 'Join to start organizing your tasks.'}
                     </p>
                 </div>
 

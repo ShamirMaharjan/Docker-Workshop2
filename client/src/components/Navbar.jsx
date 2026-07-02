@@ -16,7 +16,7 @@ export default function Navbar() {
         <nav className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center sticky top-0 z-10 shadow-sm">
             <div className="flex items-center gap-2 text-blue-600">
                 <LayoutDashboard className="h-6 w-6" />
-                <span className="text-xl font-black text-gray-900 tracking-tight">Pipeline</span>
+                <span className="text-xl font-black text-gray-900 tracking-tight">ToDo</span>
             </div>
             
             <div className="flex items-center gap-6">

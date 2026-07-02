@@ -29,7 +29,7 @@ export default function Dashboard() {
         }
     }
 
-    if (loading) return <div className="min-h-screen bg-gray-50 flex justify-center items-center font-bold text-blue-600">Loading Pipeline...</div>;
+    if (loading) return <div className="min-h-screen bg-gray-50 flex justify-center items-center font-bold text-blue-600">Loading ToDo...</div>;
 
     return (
         <div className="min-h-screen bg-gray-50 font-sans">
