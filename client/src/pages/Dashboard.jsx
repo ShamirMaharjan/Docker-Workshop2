@@ -78,13 +78,13 @@ export default function Dashboard() {
 
                     <div className="bg-blue-50/50 p-4 rounded-2xl border border-blue-100">
                         <h2 className="font-bold text-blue-800 mb-4 flex justify-between items-center">
-                            Active
+                            Focus
                             <span className="bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full text-xs">
-                                {tasks.filter(t => t.status === 'active').length}
+                                {tasks.filter(t => t.status === 'focus').length}
                             </span>
                         </h2>
                         <div className="space-y-4">
-                            {tasks.filter(t => t.status === 'active').map(task => (
+                            {tasks.filter(t => t.status === 'focus').map(task => (
                                 <TaskCard key={task._id} task={task} onStatusChange={updateStatus} onDelete={deleteTask} />
                             ))}
                         </div>
