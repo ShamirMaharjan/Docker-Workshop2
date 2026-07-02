@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext'; // <-- Ensure 'authContext' matches your file name exactly!
-import { LayoutDashboard, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { LayoutDashboard, LogOut, UserCircle } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Navbar() {
     const { user, logout } = useContext(AuthContext);
@@ -19,10 +19,16 @@ export default function Navbar() {
                 <span className="text-xl font-black text-gray-900 tracking-tight">ToDo</span>
             </div>
             
-            <div className="flex items-center gap-6">
-                <span className="text-sm font-medium text-gray-600 hidden sm:block">
-                    Welcome back, <span className="text-gray-900 font-bold">{user?.name}</span>
-                </span>
+            <div className="flex items-center gap-4 sm:gap-6">
+                <Link to="/profile" className="flex items-center gap-2 hover:bg-gray-50 px-3 py-1.5 rounded-xl transition-colors group">
+                    <UserCircle className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                    <span className="text-sm font-medium text-gray-600 hidden sm:block">
+                        <span className="text-gray-900 font-bold">{user?.name}</span>
+                    </span>
+                </Link>
+
+                <div className="h-4 w-px bg-gray-200 hidden sm:block"></div>
+                
                 <button 
                     onClick={handleLogout}
                     className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-red-600 transition-colors"
