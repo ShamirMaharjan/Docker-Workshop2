@@ -29,9 +29,9 @@ export const useTasks = () => {
     }, []);
 
     // POST: Add a new task
-    const addTask = async (title, description, priority = 'medium') => {
+    const addTask = async (title, description, dueDate, priority = 'medium') => {
         try {
-            const res = await api.post('/tasks', { title, description, priority });
+            const res = await api.post('/tasks', { title, description, dueDate, priority });
             setTasks([res.data, ...tasks]); // Add new task to the top of the state
             showNotification('Task stashed successfully!', 'success');
             return true;
