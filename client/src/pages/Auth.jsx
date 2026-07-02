@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { AuthContext } from '../context/authContext'; // Ensure casing matches your file name exactly
+import { AuthContext } from '../context/AuthContext'; // Ensure casing matches your file name exactly
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ChevronRight } from 'lucide-react';
 

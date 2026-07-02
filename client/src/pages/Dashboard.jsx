@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { AuthContext } from '../context/authContext';
+import { AuthContext } from '../context/AuthContext';
 import { LogOut, Plus, LayoutDashboard } from 'lucide-react';
 import TaskCard from '../components/TaskCard';
 import Navbar from '../components/Navbar';

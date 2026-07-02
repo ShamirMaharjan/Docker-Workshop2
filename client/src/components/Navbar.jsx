@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AuthContext } from '../context/authContext'; // <-- Ensure 'authContext' matches your file name exactly!
+import { AuthContext } from '../context/AuthContext'; // <-- Ensure 'authContext' matches your file name exactly!
 import { LayoutDashboard, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 

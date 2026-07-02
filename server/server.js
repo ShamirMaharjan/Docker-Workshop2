@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth.route');
+const taskRoutes = require('./routes/task.route');
 
 const app = express();
 const PORT = process.env.PORT;
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/tasks', taskRoutes);
 
 app.get('/', (req, res) => {
     res.json({ message: "Server is running" });
