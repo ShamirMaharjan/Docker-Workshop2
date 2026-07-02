@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const taskSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     title: { type: String, required: true },
+    description: { type: String, default: '' },
     status: {
         type: String,
-        enum: ['backlog', 'focus', 'completed'],
-        defaulkt: 'backlog',
+        enum: ['stashed', 'active', 'cleared'],
+        default: 'stashed',
     },
     priority: {
         type: String,
