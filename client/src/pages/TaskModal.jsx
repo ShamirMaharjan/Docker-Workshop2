@@ -25,7 +25,7 @@ export default function TaskModal({ isOpen, onClose, onSave }) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200 p-4">
-            <div className="bg-white rounded-3x; shadow-2xl w-full max-w-lg p-6 relative animate-in slide-in-from-bottom-8">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-6 relative animate-in slide-in-from-bottom-8">
 
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-black text-gray-900">Add New Task</h2>
@@ -53,7 +53,7 @@ export default function TaskModal({ isOpen, onClose, onSave }) {
                             rows="3"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            className="w-full pl-12 pr-4 py-3 bg-gray border border-gray-200 rounded-xl outline-none resize-none text-sm"
+                            className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none resize-none text-sm"
                         />
                     </div>
 

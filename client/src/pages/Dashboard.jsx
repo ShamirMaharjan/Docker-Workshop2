@@ -3,14 +3,16 @@ import { Plus } from 'lucide-react';
 import TaskCard from '../components/TaskCard';
 import Navbar from '../components/Navbar';
 import { useTasks } from '../hooks/useTasks';
+import TaskModal from './TaskModal';
 
 export default function Dashboard() {
     const { tasks, loading, addTask, updateStatus, deleteTask } = useTasks();
     
     // State for the quick-add form
     const [newTaskTitle, setNewTaskTitle] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleAddTask = async (e) => {
+    const handleQuickAdd = async (e) => {
         e.preventDefault();
         if (!newTaskTitle.trim()) return;
         
@@ -24,6 +26,12 @@ export default function Dashboard() {
         <div className="min-h-screen bg-gray-50 font-sans">
             <Navbar />
 
+            <TaskModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSave={addTask}
+            />
+
             <main className="max-w-7xl mx-auto p-6 lg:p-8">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <div>
@@ -31,8 +39,7 @@ export default function Dashboard() {
                         <p className="text-gray-500 mt-1">Manage your priorities and focus for today.</p>
                     </div>
                     
-                    {/* The Quick-Add Form */}
-                    <form onSubmit={handleAddTask} className="flex w-full sm:w-auto gap-2">
+                    <form onSubmit={handleQuickAdd} className="flex w-full sm:w-auto gap-2">
                         <input 
                             type="text" 
                             placeholder="What's on your mind?" 
@@ -40,16 +47,21 @@ export default function Dashboard() {
                             onChange={(e) => setNewTaskTitle(e.target.value)}
                             className="w-full sm:w-64 px-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-sm"
                         />
-                        <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-sm transition-all whitespace-nowrap">
-                            <Plus className="h-5 w-5" /> Stash It
+                        <button type="submit" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-xl font-bold flex items-center shadow-sm transition-all whitespace-nowrap">
+                            Stash
                         </button>
                     </form>
+
+                    <button 
+                        onClick={() => setIsModalOpen(true)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-sm transition-all w-full sm:w-auto justify-center"
+                    >
+                        <Plus className="h-5 w-5" /> New Task
+                    </button>
                 </div>
 
-                {/* The Pipeline Columns */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     
-                    {/* Column 1: Stashed (Backlog) */}
                     <div className="bg-gray-100/50 p-4 rounded-2xl border border-gray-200/60">
                         <h2 className="font-bold text-gray-700 mb-4 flex justify-between items-center">
                             Stashed
@@ -59,13 +71,11 @@ export default function Dashboard() {
                         </h2>
                         <div className="space-y-4">
                             {tasks.filter(t => t.status === 'stashed').map(task => (
-                                // Make sure your TaskCard accepts onDelete if you want to use it!
                                 <TaskCard key={task._id} task={task} onStatusChange={updateStatus} onDelete={deleteTask} />
                             ))}
                         </div>
                     </div>
 
-                    {/* Column 2: Active (Focus Lane) */}
                     <div className="bg-blue-50/50 p-4 rounded-2xl border border-blue-100">
                         <h2 className="font-bold text-blue-800 mb-4 flex justify-between items-center">
                             Active
@@ -80,7 +90,6 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    {/* Column 3: Cleared (Completed) */}
                     <div className="bg-gray-100/50 p-4 rounded-2xl border border-gray-200/60 opacity-70">
                         <h2 className="font-bold text-gray-500 mb-4 flex justify-between items-center">
                             Cleared
