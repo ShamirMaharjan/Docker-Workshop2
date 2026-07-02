@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CheckCircle, Circle, ArrowRight, EllipsisVertical, Trash2, Edit2, Calendar as CalendarIcon } from 'lucide-react';
 
-export default function TaskCard({ task, onStatusChange, onDelete }) {
+export default function TaskCard({ task, onStatusChange, onDelete, onEdit }) {
     const [showMenu, setShowMenu] = useState(false);
 
     const priorityColors = {
@@ -60,7 +60,7 @@ export default function TaskCard({ task, onStatusChange, onDelete }) {
                         {showMenu && (
                             <div className="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10 animate-in fade-in zoom-in-95 duration-100">
                                 <button
-                                    onClick={() => { setShowMenu(false); }}
+                                    onClick={() => { setShowMenu(false); onEdit(task); }}
                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
                                 >
                                     <Edit2 className="h-4 w-4" /> Edit
@@ -102,7 +102,7 @@ export default function TaskCard({ task, onStatusChange, onDelete }) {
                         onClick={() => onStatusChange(task._id, 'focus')}
                         className="text-xs font-bold text-blue-600 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-50 px-2 py-1 rounded-md hover:bg-blue-100"
                     >
-                        Make Focus <ArrowRight className="h-3 w-3" />
+                        Move to Focus <ArrowRight className="h-3 w-3" />
                     </button>
                 )}
             </div>

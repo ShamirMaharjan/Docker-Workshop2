@@ -1,11 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, AlignLeft, Flag, Calendar } from 'lucide-react';
 
-export default function TaskModal({ isOpen, onClose, onSave }) {
+export default function TaskModal({ isOpen, onClose, onSave, editingTask }) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [dueDate, setDueDate] = useState('');
     const [priority, setPriority] = useState('medium');
+
+    useEffect(() => {
+        if (editingTask) {
+            setTitle(editingTask.title);
+            setDescription(editingTask.description || '');
+            setDueDate(editingTask.dueDate ? new Date(editingTask.dueDate).toISOString().split('T')[0] : '');
+            setPriority(editingTask.priority || 'medium');
+        } else {
+            setTitle('');
+            setDescription('');
+            setDueDate('');
+            setPriority('medium');
+        }
+    }, [editingTask, isOpen])
 
     if (!isOpen) return null;
 
@@ -13,12 +27,8 @@ export default function TaskModal({ isOpen, onClose, onSave }) {
         e.preventDefault();
         if (!title.trim()) return;
 
-        const success = await onSave(title, description, dueDate, priority || null);
+        const success = await onSave(title, description, dueDate, priority || null, editingTask?._id);
         if (success) {
-            setTitle('');
-            setDescription('');
-            setDueDate('');
-            setPriority('medium');
             onClose();
         }
     };
@@ -28,7 +38,9 @@ export default function TaskModal({ isOpen, onClose, onSave }) {
             <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-6 relative animate-in slide-in-from-bottom-8">
 
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-black text-gray-900">Add New Task</h2>
+                    <h2 className="text-2xl font-black text-gray-900">
+                        {editingTask ? 'Edit Task' : 'Add New Task'}
+                    </h2>
                     <button onClick={onClose} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-500 transition-colors">
                         <X className="h-5 w-5" />
                     </button>
@@ -83,7 +95,7 @@ export default function TaskModal({ isOpen, onClose, onSave }) {
                     </div>
 
                     <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all shadow-md mt-4">
-                        Stash Task
+                        {editingTask ? 'Update Task' : 'Add Task'}
                     </button>
                 </form>
             </div>

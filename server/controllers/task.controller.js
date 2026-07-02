@@ -2,7 +2,7 @@ const Task = require('../models/task.model');
 
 const getTasks = async (req, res) => {
     try {
-        const tasks = (await Task.find({ userId: req.user._id })).toSorted({ createdAt: -1 });
+        const tasks = await Task.find({ userId: req.user._id }).sort({ createdAt: -1 });
         res.status(200).json(tasks);
     } catch (error) {
         res.status(500).json({ message: "Server error while fetching tasks. ", error });

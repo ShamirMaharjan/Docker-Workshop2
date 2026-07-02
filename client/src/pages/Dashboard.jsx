@@ -6,19 +6,28 @@ import { useTasks } from '../hooks/useTasks';
 import TaskModal from './TaskModal';
 
 export default function Dashboard() {
-    const { tasks, loading, addTask, updateStatus, deleteTask } = useTasks();
+    const { tasks, loading, addTask, updateStatus, deleteTask, editTask } = useTasks();
     
     // State for the quick-add form
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [taskToEdit, setTaskToEdit] = useState(null);
 
     const handleQuickAdd = async (e) => {
         e.preventDefault();
         if (!newTaskTitle.trim()) return;
         
-        const success = await addTask(newTaskTitle, '', 'medium');
+        const success = await addTask(newTaskTitle, '', null, 'medium');
         if (success) setNewTaskTitle(''); // Clear input on success
     };
+
+    const handleModalSave = async (title, desc, date, prio, editId) => {
+        if (editId) {
+            return await editTask(editId, title, desc, date, prio);
+        } else {
+            return await addTask(title, desc, date, prio);
+        }
+    }
 
     if (loading) return <div className="min-h-screen bg-gray-50 flex justify-center items-center font-bold text-blue-600">Loading Pipeline...</div>;
 
@@ -29,7 +38,8 @@ export default function Dashboard() {
             <TaskModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                onSave={addTask}
+                onSave={handleModalSave}
+                editingTask={taskToEdit}
             />
 
             <main className="max-w-7xl mx-auto p-6 lg:p-8">
@@ -71,7 +81,13 @@ export default function Dashboard() {
                         </h2>
                         <div className="space-y-4">
                             {tasks.filter(t => t.status === 'stashed').map(task => (
-                                <TaskCard key={task._id} task={task} onStatusChange={updateStatus} onDelete={deleteTask} />
+                                <TaskCard
+                                    key={task._id}
+                                    task={task}
+                                    onStatusChange={updateStatus}
+                                    onDelete={deleteTask}
+                                    onEdit={(task) => { setTaskToEdit(task); setIsModalOpen(true);  }}
+                                />
                             ))}
                         </div>
                     </div>

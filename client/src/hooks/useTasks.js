@@ -29,10 +29,18 @@ export const useTasks = () => {
     }, []);
 
     // POST: Add a new task
+    // POST: Add a new task
     const addTask = async (title, description, dueDate, priority = 'medium') => {
         try {
-            const res = await api.post('/tasks', { title, description, dueDate, priority });
-            setTasks([res.data, ...tasks]); // Add new task to the top of the state
+            const payload = { 
+                title, 
+                description, 
+                priority,
+                ...(dueDate ? { dueDate } : {}) 
+            };
+
+            const res = await api.post('/tasks', payload);
+            setTasks([res.data, ...tasks]); 
             showNotification('Task stashed successfully!', 'success');
             return true;
         } catch (error) {
@@ -64,11 +72,24 @@ export const useTasks = () => {
         }
     };
 
+    const editTask = async (taskId, title, description, dueDate, priority) => {
+        try {
+            const res = await api.put(`/tasks/${taskId}`, { title, description, dueDate, priority });
+            setTasks(tasks.map(t => t._id === taskId ? res.data : t));
+            showNotification('Task updated!', 'success');
+            return true;
+        } catch (error) {
+            showNotification('Failed to update task', 'error', error);
+            return false;
+        }
+    };
+
     return {
         tasks,
         loading,
         addTask,
         updateStatus,
-        deleteTask
+        deleteTask,
+        editTask
     };
 };
