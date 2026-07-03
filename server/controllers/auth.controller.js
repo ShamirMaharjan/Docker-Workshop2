@@ -6,7 +6,11 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, turnstileToken } = req.body;
+
+        if (!turnstileToken) return res.status(400).json({ message: "Security verification failed." });
+        const isCaptchValid = await verifyTurnstile(turnstileToken);
+        if (!isCaptchValid) return res.status(400).json({ message: "Security verification failed." });
 
         const userExists = await User.findOne({ email });
         if (userExists) {
@@ -36,7 +40,11 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, tunrstileToken } = req.body;
+
+        if (!turnstileToken) return res.status(400).json({ message: "Security verification failed." });
+        const isCaptchValid = await verifyTurnstile(turnstileToken);
+        if (!isCaptchValid) return res.status(400).json({ message: "Security verification failed." });
         
         const user = await User.findOne({ email });
         if (!user) {
@@ -101,4 +109,21 @@ const googleLogin = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser, googleLogin };
+const verifyTurnstile = async (token) => {
+    try {
+        const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+            method: 'POST',
+            body: new URLSearchParams({
+                secret: process.env.TURNSTILE_SECRET_KEY,
+                response: token
+            })
+        });
+        const data = await response.json();
+        return data.success;
+    } catch (error) {
+        console.error("{turnstile verification error", error);
+        return false;
+    }
+};
+
+module.exports = { registerUser, loginUser, googleLogin, verifyTurnstile };
