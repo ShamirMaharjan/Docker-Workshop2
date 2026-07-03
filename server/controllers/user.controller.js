@@ -58,7 +58,7 @@ const updateName = async (req, res) => {
         const updateUser = await User.findByIdAndUpdate(
             req.user._id,
             { name },
-            { new: true }
+            { returnDocument: 'after' }
         ).select('-password');
 
         res.status(200).json(updateUser);
@@ -103,7 +103,7 @@ const updateEmailWithOTP = async (req, res) => {
         const updatedUser = await User.findByIdAndUpdate(
             req.user._id,
             { email: newEmail },
-            { new: true }
+            { returnDocument: 'after' }
         ).select('-password');
 
         // delete the used otp

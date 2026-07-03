@@ -7,39 +7,44 @@ import { Flame, CheckCircle, Target, User, ArrowLeft, X, Mail, Lock, ArrowRight,
 import { Link } from 'react-router-dom';
 
 export default function Profile() {
-    const { user, logout } = useContext(AuthContext);
+    const { user, logout, updateUser } = useContext(AuthContext);
     const { tasks } = useTasks();
     const { profileData, loading, updateName, requestOTP, updateEmail, updatePassword } = useProfile();
 
-    // Unified Settings State
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [newName, setNewName] = useState(user?.name || '');
     
-    // Security Flow States
-    const [securityStep, setSecurityStep] = useState(1); // 1: Menu, 2: OTP & New Value Input
+    const [securityStep, setSecurityStep] = useState(1); // 1: menu, 2: OTP and new value input
     const [securityMode, setSecurityMode] = useState('none'); // 'email' or 'password'
     const [newValue, setNewValue] = useState('');
     const [otp, setOtp] = useState('');
+    const [isSendingOTP, setIsSendingOTP] = useState(false);
 
     const activeTasksCount = tasks.filter(t => t.status === 'active').length;
 
-    // 1. Save Name independently
     const handleNameSave = async (e) => {
         e.preventDefault();
         if (newName === user?.name) return;
-        await updateName(newName);
-    };
-
-    // 2. Trigger OTP and move to next step
-    const handleInitSecurityChange = async (mode) => {
-        setSecurityMode(mode);
-        const success = await requestOTP(); // FIXED: No longer checks for newValue first!
-        if (success) {
-            setSecurityStep(2);
+        
+        const updatedUser = await updateName(newName);
+        if (updatedUser) {
+            updateUser(updatedUser);
+            setIsSettingsOpen(false);
         }
     };
 
-    // 3. Verify OTP and Save New Credentials
+    // trigger OTP and move to next step
+    const handleInitSecurityChange = async (mode) => {
+        setSecurityMode(mode);
+        setSecurityStep(2);
+        setIsSendingOTP(true);
+        
+        await requestOTP();
+
+        setIsSendingOTP(false);
+    };
+
+    // verify OTP and save new credentials
     const handleVerifyAndSave = async (e) => {
         e.preventDefault();
         let success = false;
@@ -51,7 +56,6 @@ export default function Profile() {
         }
 
         if (success) {
-            // Reset and close
             setSecurityStep(1);
             setSecurityMode('none');
             setNewValue('');
@@ -80,7 +84,7 @@ export default function Profile() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
-                    {/* Left Column: Identity */}
+                    {/*left column*/}
                     <div className="md:col-span-1 space-y-6">
                         <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10"></div>
@@ -108,7 +112,7 @@ export default function Profile() {
                         </div>
                     </div>
 
-                    {/* Right Column: Gamification Stats */}
+                    {/*right column*/}
                     <div className="md:col-span-2 space-y-6">
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm flex flex-col justify-center items-center text-center">
@@ -149,7 +153,6 @@ export default function Profile() {
                 </div>
             </main>
 
-            {/* --- UNIFIED SETTINGS MODAL --- */}
             {isSettingsOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
                     <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-6 relative overflow-hidden">
@@ -162,8 +165,7 @@ export default function Profile() {
                         </button>
                         
                         <h2 className="text-2xl font-black mb-6 text-gray-900">Profile Settings</h2>
-
-                        {/* Section 1: General (Always Visible) */}
++
                         <div className="mb-6">
                             <label className="text-xs font-bold text-gray-400 uppercase mb-2 block tracking-wider">Display Name</label>
                             <div className="flex gap-2">
@@ -187,12 +189,11 @@ export default function Profile() {
 
                         <hr className="border-gray-100 mb-6" />
 
-                        {/* Section 2: Security & Identity */}
                         <div>
                             <label className="text-xs font-bold text-gray-400 uppercase mb-3 block tracking-wider">Security & Identity</label>
 
                             {securityStep === 1 ? (
-                                /* STEP 1: Select what to change */
+                                /*select what to change*/
                                 <div className="space-y-3 animate-in fade-in slide-in-from-left-4 duration-300">
                                     <button 
                                         onClick={() => handleInitSecurityChange('email')} 
@@ -217,14 +218,23 @@ export default function Profile() {
                                     </button>
                                 </div>
                             ) : (
-                                /* STEP 2: Verify & Enter New Value */
+                                /*verify and enter new value*/
                                 <form onSubmit={handleVerifyAndSave} className="space-y-4 animate-in slide-in-from-right-4 fade-in duration-300">
-                                    <div className="bg-blue-50/80 border border-blue-100 text-blue-700 p-4 rounded-xl text-sm font-medium mb-4 flex gap-3 items-start">
-                                        <Shield className="h-5 w-5 shrink-0 mt-0.5" />
-                                        <p>OTP sent! Enter the 6-digit code sent to your current email to authorize this change.</p>
+                                    <div className="bg-blue-50/80 border border-blue-100 text-blue-700 p-4 rounded-xl text-sm font-medium mb-4 flex gap-3 items-start transition-all">
+                                        {isSendingOTP ? (
+                                            <div className="flex gap-3 items-center">
+                                                <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin shrink-0"></div>
+                                                <p>Sending secure code to your email...</p>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <Shield className="h-5 w-5 shrink-0 mt-0.5" />
+                                                <p>OTP sent! Enter the 6-digit code sent to your current email to authorize this change.</p>
+                                            </>
+                                        )}
                                     </div>
 
-                                    {/* OTP Input */}
+                                    {/*OTP input*/}
                                     <div>
                                         <label className="text-[10px] font-bold text-gray-400 uppercase ml-1 block">Verification Code</label>
                                         <input
@@ -238,7 +248,7 @@ export default function Profile() {
                                         />
                                     </div>
 
-                                    {/* New Value Input */}
+                                    {/*new value input*/}
                                     <div>
                                         <label className="text-[10px] font-bold text-gray-400 uppercase ml-1 block">
                                             New {securityMode === 'email' ? 'Email Address' : 'Password'}
