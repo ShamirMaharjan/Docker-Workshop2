@@ -33,6 +33,7 @@ export default function Auth() {
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Authentication failed. Please try again.');
+            setTurnstileToken('');
         } finally {
             setLoading(false);
         }
@@ -60,7 +61,7 @@ export default function Auth() {
                     style={{ transform: isLogin ? 'translateX(0)' : 'translateX(-50%)' }}
                 >
                     {/*login view left side*/}
-                    <div className="w-1/2 shrink-0 px-8">
+                    <div className="w-1/2 shrink-0 px-8 pt-8">
                         <div className="mb-8 text-center">
                             <h2 className="text-3xl font-black text-gray-900 mb-2">Welcome Back</h2>
                             <p className="text-gray-500 text-sm">Log in to manage your tasks.</p>
@@ -115,7 +116,7 @@ export default function Auth() {
                             {isLogin && (
                                 <div className="flex justify-center pt-2">
                                     <Turnstile
-                                        siteKey="1x00000000000000000000AA" // cloudflare universal always pass test key
+                                        siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
                                         onSuccess={(token) => setTurnstileToken(token)}
                                     />
                                 </div>
@@ -127,7 +128,7 @@ export default function Auth() {
                     </div>
 
                     {/*register view right side*/}
-                    <div className="w-1/2 shrink-0 px-2">
+                    <div className="w-1/2 shrink-0 px-8 pt-8">
                         <div className="mb-8 text-center">
                             <h2 className="text-3xl font-black text-gray-900 mb-2">Create Account</h2>
                             <p className="text-gray-500 text-sm">Join to start organizing your tasks.</p>
@@ -193,7 +194,7 @@ export default function Auth() {
                             {!isLogin && (
                                 <div className="flex justify-center pt-2">
                                     <Turnstile
-                                        siteKey="1x00000000000000000000AA" // cloudflare universal always pass test key
+                                        siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
                                         onSuccess={(token) => setTurnstileToken(token)}
                                     />
                                 </div>
@@ -206,7 +207,7 @@ export default function Auth() {
                 </div>
 
                 {/*static bottom toggle*/}
-                <p className="text-center mt-8 text-sm text-gray-500 relative z-10 bg-white">
+                <p className="text-center mt-8 text-sm text-gray-500 relative z-10 bg-white pb-4">
                     {isLogin ? "Don't have an account? " : "Already have an account? "}
                     <button type="button" onClick={handleToggle} className="text-blue-600 font-bold hover:underline focus:outline-none">
                         {isLogin ? 'Sign up' : 'Log in'}

@@ -19,14 +19,14 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    const login = async (email, password) => {
-        const res = await api.post('/auth/login', { email, password });
+    const login = async (email, password, turnstileToken) => {
+        const res = await api.post('/auth/login', { email, password, turnstileToken });
         setUser(res.data.user);
         localStorage.setItem('todo_user', JSON.stringify(res.data.user));
     };
 
-    const register = async (name, email, password) => {
-        const res = await api.post('/auth/register', { name, email, password });
+    const register = async (name, email, password, turnstileToken) => {
+        const res = await api.post('/auth/register', { name, email, password, turnstileToken });
         setUser(res.data.user);
         localStorage.setItem('todo_user', JSON.stringify(res.data.user));
     };
