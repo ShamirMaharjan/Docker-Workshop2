@@ -25,7 +25,7 @@ const getUserProfile = async (req, res) => {
         const today = new Date().setHours(0, 0, 0, 0);
         const yesterday = today - 86400000; // 24 hours in milliseconds
 
-        if (uniqueDares.length > 0) {
+        if (uniqueDates.length > 0) {
             // check if user have cleared task today or yeasterday to keep the streak alive
             if (uniqueDates[0] === today || uniqueDates[0] === yesterday) {
                 streak = 1;
@@ -73,7 +73,7 @@ const requestSecurityOTP = async (req, res) => {
         await OTP.deleteMany({ userId: req.user._id });
 
         const otpCode = generateOTP();
-        await OTP.createIndexes({ userId: req.user._id, otp: otpCode });
+        await OTP.create({ userId: req.user._id, otp: otpCode });
 
         const emailSent = await sendEmail(
             req.user.email,

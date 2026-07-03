@@ -16,7 +16,7 @@ export const useProfile = () => {
 
     const fetchProfile = async () => {
         try {
-            const res = await api.get('/users.profile');
+            const res = await api.get('/users/profile');
             setProfileData({ streak: res.data.streak, totalCleared: res.data.totalCleared });
         } catch (error) {
             showNotification('Failed to load profile stats', 'error', error);
@@ -31,7 +31,7 @@ export const useProfile = () => {
 
     const updateName = async (name) => {
         try {
-            const res = await api.put('/users.profile/name', { name });
+            const res = await api.put('/users/profile/name', { name });
             showNotification('Name updated successfully', 'success');
             return res.data; // return updated user
         } catch (error) {
