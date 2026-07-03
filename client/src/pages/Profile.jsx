@@ -1,21 +1,60 @@
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useProfile } from '../hooks/useProfile';
 import { useTasks } from '../hooks/useTasks';
 import Navbar from '../components/Navbar';
-import { Flame, CheckCircle, Target, Shield, User, ArrowLeft } from 'lucide-react';
+import { Flame, CheckCircle, Target, Shield, User, ArrowLeft, X, Mail, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Profile() {
-    const { user } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const { tasks } = useTasks();
+    const { profileData, loading, updateName, requestOTP, updateEmail, updatePassword } = useProfile();
 
     const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
-    const [isSecurityOpen, setIsSecurityOpen] = useState(false);
+    const [newName, setNewName] = useState(user?.name || '');
 
-    const clearedTasksCount = tasks.filter(t => t.status === 'cleared').length;
+    const [isSecurityOpen, setIsSecurityOpen] = useState(false);
+    const [securityStep, setSecurityStep] = useState(1); // 1: request otp, 2: verify otp
+    const [securityType, setSecurityType] = useState('email'); // 'email' or 'password'
+    const [newValue, setNewValue] = useState('');
+    const [otp, setOtp] = useState('');
+
     const activeTasksCount = tasks.filter(t => t.status === 'active').length;
-    
-    const currentStreak = 4; //mock data
+
+    const handleNameSave = async (e) => {
+        e.preventDefault();
+        const updatedUser = await updateName(newName);
+        if (updatedUser) {
+            setIsEditProfileOpen(false);
+        }
+    };
+
+    const handleRequestOTP = async () => {
+        if (!newValue.trim()) return;
+        const success = await requestOTP();
+        if (success) setSecurityStep(2); // move to otp input step
+    };
+
+    const handleVerifyOTP = async (e) => {
+        e.preventDefault();
+        let success = false;
+
+        if (securityType === ' email') {
+            success = await updateEmail(otp, newValue);
+        } else {
+            success = await updatePassword(otp, newValue);
+        }
+
+        if (success) {
+            setIsSecurityOpen(false);
+            setSecurityStep(1);
+            setNewValue('');
+            setOtp('');
+        }
+    };
+
+    if (loading) return <div className="min-h-screen bg-gray-50 flex justify-center items-center font-bold text-blue-600">Loading profile...</div>
 
     return (
         <div className="min-h-screen bg-gray-50 font-sans">
@@ -71,7 +110,7 @@ export default function Profile() {
                                 <div className="h-12 w-12 bg-green-50 text-green-500 rounded-2xl flex items-center justify-center mb-3">
                                     <CheckCircle className="h-6 w-6" />
                                 </div>
-                                <h3 className="text-3xl font-black text-gray-900">{clearedTasksCount}</h3>
+                                <h3 className="text-3xl font-black text-gray-900">{profileData.totalCleared}</h3>
                                 <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Tasks Cleared</p>
                             </div>
 
@@ -87,7 +126,7 @@ export default function Profile() {
                                 <div className="h-12 w-12 bg-white/20 text-white rounded-2xl flex items-center justify-center mb-3">
                                     <Flame className="h-6 w-6" />
                                 </div>
-                                <h3 className="text-3xl font-black text-white">{currentStreak} <span className="text-lg">Days</span></h3>
+                                <h3 className="text-3xl font-black text-white">{profileData.streak} <span className="text-lg">Days</span></h3>
                                 <p className="text-xs font-bold text-white/80 uppercase tracking-wider mt-1">Current Streak</p>
                             </div>
                         </div>
@@ -101,10 +140,74 @@ export default function Profile() {
                                 <p className="text-sm text-gray-400">Your emotion-aware companion will appear here once enough data is gathered.</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </main>
+
+            {/*edit modals*/}
+            {isEditProfileOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6 relative">
+                        <button onClick={() => setIsEditProfileOpen(false)} className="absolute top-4 right-4 p-2 bg-gray-100 rounded-full text-gray-500"><X className="h-4 w-4" /></button>
+                        <h2 className="text-xl font-black mb-4">Edit Profile</h2>
+                        <form onSubmit={handleNameSave}>
+                            <input
+                                type="text"
+                                value={newName}
+                                onChange={e => setNewName(e.target.value)}
+                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl mb-4 outline-none"
+                                required
+                            />
+                            <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {isSecurityOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+                    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6 relative">
+                        <button onClick={() => { setIsSecurityOpen(false); setSecurityStep(1); }} className="absolute top-4 right-4 p-2 bg-gray-100 rounded-full text-gray-500"><X className="h-4 w-4" /></button>
+                        <h2 className="text-xl font-black mb-6">Security Settings</h2>
+
+                        {securityStep === 1 ? (
+                            // step 1: select type and reuqest otp
+                            <div className="space-y-4">
+                                <div className="flex gap-2 mb-4">
+                                    <button onClick={() => setSecurityType('email')} className={`flex-1 py-2 rounded-lg font-bold text-sm ${securityType === 'email' ? 'bg-blue-600 text-blue-700' : 'bg-gray-50 text-gray-500'}`}>Change Email</button>
+                                    <button onClick={() => setSecurityType('password')} className={`flex-1 py-2 rounded-lg font-bold text-sm ${securityType === 'password' ? 'bg-blue-600 text-blue-700' : 'bg-gray-50 text-gray-500'}`}>Change Password</button>
+                                </div>
+                                <div className="relative">
+                                    {securityType === 'email' ? <Mail className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" /> : <Lock className="absolute left-3.5 h-5 w-5 text-gray-400" />}
+                                    <input
+                                        type={securityType === 'email' ? 'email' : 'password'}
+                                        placeholder={`Enter new ${securityType}...`}
+                                        value={newValue}
+                                        onChange={e => setNewValue(e.target.value)}
+                                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none"
+                                    />
+                                </div>
+                                <button onClick={handleRequestOTP} className="w-full bg-slate-900 text-white font-bold py-3 rounded-xl mt-4">Send OTP to Email</button>
+                            </div>
+                        ) : (
+                            // step 2: verify otp
+                            <form onSubmit={handleVerifyOTP} className="space-y-4">
+                                <p className="text-sm text-gray-500 text-center mb-4">We send a 6-digit code to your email. Enter it below to confirm your new {securityType}.</p>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter 6-digit OTP"
+                                        value={otp}
+                                        maxLength={6}
+                                        onChange={e => setOtp(e.target.value)}
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none text-center font-bold tracking-widest text-lg"
+                                        required 
+                                    />
+                                    <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl">verify & Update</button>
+                            </form>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
