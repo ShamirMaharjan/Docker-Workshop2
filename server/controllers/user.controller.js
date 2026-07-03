@@ -2,6 +2,7 @@ const User = require('../models/user.model');
 const Task = require('../models/task.model');
 const OTP = require('../models/otp.model');
 const sendEmail = require('../utils/sendEmail');
+const bcrypt = require('bcrypt');
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -114,9 +115,32 @@ const updateEmailWithOTP = async (req, res) => {
     }
 };
 
+const updatePasswordWithOTP = async (req, res) => {
+    try {
+        const { otp, newPassword } = req.body;
+
+        const validOtp = await OTP.findOne({ userId: req.user._id, otp });
+        if (!validOtp) {
+            return res.status(400).json({ message: "Invalid or expired OTP." });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        await User.findByIdAndUpdate(req.user._id, { password: hashedPassword });
+
+        await OTP.deleteOne({ _id: validOtp._id });
+
+        res.status(200).json({ message: "Password updated successfully." });
+    } catch (error) {
+        res.status(500).json({ message: "Error updating password." });
+    }
+};
+
 module.exports = {
     getUserProfile,
     updateName,
     requestSecurityOTP,
-    updateEmailWithOTP
+    updateEmailWithOTP,
+    updatePasswordWithOTP,
 };
