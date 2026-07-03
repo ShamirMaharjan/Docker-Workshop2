@@ -121,7 +121,7 @@ export default function Dashboard() {
                         
                         {/*mobile navigation tabs*/}
                         <div className="md:hidden flex gap-2 mb-4 bg-gray-200/50 p-1 rounded-xl shrink-0">
-                            {['Stashed', 'Focus', 'Cleared'].map((tab, idx) => (
+                            {['Stashed', 'Active', 'Cleared'].map((tab, idx) => (
                                 <button 
                                     key={tab}
                                     onClick={() => scrollToTab(idx)}

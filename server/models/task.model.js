@@ -7,7 +7,7 @@ const taskSchema = new mongoose.Schema({
     dueDate: { type: Date },
     status: {
         type: String,
-        enum: ['stashed', 'focus', 'cleared'],
+        enum: ['stashed', 'active', 'cleared'],
         default: 'stashed',
     },
     priority: {

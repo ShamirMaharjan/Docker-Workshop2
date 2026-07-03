@@ -87,7 +87,7 @@ export default function TaskCard({ task, onStatusChange, onDelete, onEdit }) {
 
                 {task.status === 'stashed' && (
                     <button
-                        onClick={() => onStatusChange(task._id, 'focus')}
+                        onClick={() => onStatusChange(task._id, 'active')}
                         className="text-[10px] sm:text-xs font-bold text-blue-600 flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity bg-blue-50 px-2 py-1 rounded-md hover:bg-blue-100"
                     >
                         Focus <ArrowRight className="h-3 w-3" />
