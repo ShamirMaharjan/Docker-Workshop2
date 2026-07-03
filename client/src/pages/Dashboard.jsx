@@ -5,6 +5,7 @@ import TaskCard from '../components/TaskCard';
 import Navbar from '../components/Navbar';
 import { useTasks } from '../hooks/useTasks';
 import TaskModal from './TaskModal';
+import DashboardSkeleton from '../components/DashboardSkelton';
 
 export default function Dashboard() {
     const { tasks, loading, addTask, updateStatus, deleteTask, editTask } = useTasks();
@@ -56,7 +57,7 @@ export default function Dashboard() {
         (task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
-    if (loading) return <div className="min-h-screen bg-gray-50 flex justify-center items-center font-bold text-blue-600">Loading ToDos...</div>;
+    if (loading) return <div><DashboardSkeleton /></div>;
 
     return (
         <div className="min-h-screen bg-gray-50 font-sans pb-20 md:pb-0">
