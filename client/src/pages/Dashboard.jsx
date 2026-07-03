@@ -62,8 +62,8 @@ export default function Dashboard() {
 
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <div>
-                        <h1 className="text-3xl font-black text-gray-900">Your Workflow</h1>
-                        <p className="text-gray-500 mt-1">Manage your priorities and focus for today.</p>
+                        <h1 className="sm:text-3xl text-2xl font-black text-gray-900">Your Workflow</h1>
+                        <p className="text-gray-500 sm:text-base text-sm mt-1">Manage your priorities and focus for today.</p>
                     </div>
 
                     <div className="flex w-full sm:w-auto gap-3 flex-col sm:flex-row">
@@ -78,7 +78,7 @@ export default function Dashboard() {
                             />
                         </div>
 
-                        <form onSubmit={handleQuickAdd} className="flex w-full sm:w-auto gap-2">
+                        <form onSubmit={handleQuickAdd} className="sm:flex w-full sm:w-auto gap-2 hidden">
                             <input 
                                 type="text" 
                                 placeholder="What's on your mind?" 
@@ -93,18 +93,19 @@ export default function Dashboard() {
 
                         <button 
                             onClick={() => setIsModalOpen(true)}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-sm transition-all w-full sm:w-auto justify-center"
+                            className="hidden md:flex bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold items-center gap-2 shadow-sm transition-all whitespace-nowrap"
                         >
                             <Plus className="h-5 w-5" /> New Task
                         </button>
                     </div>
                 </div>
-
         
                 <DragDropContext onDragEnd={onDragEnd}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        
-                        <div className="bg-gray-100/50 p-4 rounded-2xl border border-gray-200/60 flex flex-col">
+                    {/*swipable container*/}
+                    <div className="flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-4 md:grid md:grid:cols-2 lg:grid-cols-3 mg:gap-6 md:overflow-visible">
+
+                        {/*column 1 stashed*/}
+                        <div className="w-[85vw] sm:w-[350px] md:w-auto shrink-0 snap-center bg-gray-100/50 p-3 sm:p-4 rounded-2xl border border-gray-200/60 flex flex-col h-[calc(100vh-250px)] mf:h-auto overflow-hidden">
                             <h2 className="font-bold text-gray-700 mb-4 flex justify-between items-center">
                                 Stashed
                                 <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">
@@ -138,9 +139,10 @@ export default function Dashboard() {
                             </Droppable>
                         </div>
 
-                        <div className="bg-blue-50/50 p-4 rounded-2xl border border-blue-100 flex flex-col">
+                        {/*column 2 focus*/}
+                        <div className="w-[85vw] sm:w-[350px] md:w-auto shrink-0 snap-center bg-blue-50/50 p-3 sm:p-4 rounded-2xl border border-blue-100 flex flex-col h-[calc(100vh-250px)] mf:h-auto overflow-hidden">
                             <h2 className="font-bold text-blue-800 mb-4 flex justify-between items-center">
-                                Active
+                                Focus
                                 <span className="bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full text-xs">
                                     {filteredTasks.filter(t => t.status === 'active').length}
                                 </span>
@@ -172,7 +174,8 @@ export default function Dashboard() {
                             </Droppable>
                         </div>
 
-                        <div className="bg-gray-100/50 p-4 rounded-2xl border border-gray-200/60 flex flex-col opacity-70 hover:opacity-100 transition-opacity">
+                        {/*column 3 cleared*/}
+                        <div className="w-[85vw] sm:w-[350px] md:w-auto shrink-0 snap-center bg-gray-100/50 p-3 sm:p-4 rounded-2xl border border-gray-200/60 flex flex-col h-[calc(100vh-250px)] mf:h-auto overflow-hidden">
                             <h2 className="font-bold text-gray-500 mb-4 flex justify-between items-center">
                                 Cleared
                                 <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">
@@ -205,10 +208,16 @@ export default function Dashboard() {
                                 )}
                             </Droppable>
                         </div>
-
                     </div>
                 </DragDropContext>
             </main>
+
+            <button
+                onClick={() => setIsModalOpen(true)}
+                className="md:hidden fixed bottom-12 right-6 h-14 w-22 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-[0_8px_30px_rgb(37,99,235,0.4)] flex items-center justify-center z-40 transition-transform active:scale-95"
+            >
+                <Plus className="h-8 w-8" />
+            </button>
         </div>
     );
 }
