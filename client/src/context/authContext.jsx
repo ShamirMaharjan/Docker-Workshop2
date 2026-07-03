@@ -41,8 +41,14 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('todo_user', JSON.stringify(updatedUserData));
     };
 
+    const googleLogin = async (credential) => {
+        const res = await api.post('/auth/google', { credential });
+        setUser(res.data.user);
+        localStorage.setItem('todo_user', JSON.stringify(res.data.user));
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, loading, updateUser }}>
+        <AuthContext.Provider value={{ user, login, register, logout, loading, updateUser, googleLogin }}>
             {children}
         </AuthContext.Provider>
     );
