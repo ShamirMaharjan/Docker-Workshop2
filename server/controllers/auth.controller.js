@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
 const generateToken = require('../utils/generateToken');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const registerUser = async (req, res) => {
     try {
@@ -57,4 +59,46 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser };
+const googleLogin = async (req, res) => {
+    try {
+        const { credential } = req.body;
+
+        //verify the token with google
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+
+        const payload = ticket.getPayload();
+        const { email, name, sub: googleId } = payload;
+
+        // check if user already exists
+        let user = await User.findOne({ email });
+
+        if (user) {
+            // if user exists and not with googleId, linked it
+            if (!user.googleId) {
+                user.googleId = googleId;
+                await user.save();
+            }
+        } else {
+            user = await User.create({
+                name,
+                email,
+                googleId,
+            });
+        }
+
+        generateToken(res, user._id);
+
+        res.status(200).json({
+            message: "Google login successful",
+            user: { id: user._id, name: user.name, email: user.email }
+        });
+    } catch (error) {
+        console.error("google auth error", error);
+        res.status(401).json({ message: "Google authentication failed." });
+    }
+};
+
+module.exports = { registerUser, loginUser, googleLogin };
