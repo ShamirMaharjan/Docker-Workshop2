@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext'; // Ensure casing matches your file name exactly
+import { AuthContext } from '../context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ChevronRight } from 'lucide-react';
 
@@ -10,7 +11,7 @@ export default function Auth() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     
-    const { login, register } = useContext(AuthContext);
+    const { login, register, googleLogin } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -50,8 +51,33 @@ export default function Auth() {
                     </div>
                 )}
 
+                <div className="mb-6 flex justify-center w-full">
+                    <GoogleLogin
+                        onSuccess={async (credentialResponse) => {
+                            try {
+                                await googleLogin(credentialResponse.credential);
+                                navigate('/dashboard');
+                            } catch (err) {
+                                setError('Google authentication failed. Please try again.', err);
+                            }
+                        }}
+                        onError={() => {
+                            setError('Google authentication failed. Please try again.');
+                        }}
+                        theme="outline"
+                        size="large"
+                        width="100%"
+                        text={isLogin ? "signin_with" : "signup_with"}
+                    />
+                </div>
+
+                <div className="relative flex py-2 items-center mb-6">
+                    <div className="flex grow border-t border-gray-200"></div>
+                    <span className="flex-shrink-0 mx-4 text-gray-400 text-sm font-bold uppercase tracking-wider">Or</span>
+                    <div className="flex grow border-t border-gray-200"></div>
+                </div>
+
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    {/* Fixed: Now uses !isLogin so it only shows on Registration */}
                     {!isLogin && (
                         <div className="relative">
                             <User className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
