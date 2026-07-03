@@ -5,7 +5,7 @@ import TaskCard from '../components/TaskCard';
 import Navbar from '../components/Navbar';
 import { useTasks } from '../hooks/useTasks';
 import TaskModal from './TaskModal';
-import DashboardSkeleton from '../components/DashboardSkelton';
+import DashboardSkeleton from '../components/skelton/Dashboard';
 
 export default function Dashboard() {
     const { tasks, loading, addTask, updateStatus, deleteTask, editTask } = useTasks();

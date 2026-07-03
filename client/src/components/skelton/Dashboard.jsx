@@ -1,4 +1,4 @@
-import Navbar from "./Navbar";
+import Navbar from "../Navbar";
 
 export default function DashboardSkelton() {
     return (
@@ -18,7 +18,7 @@ export default function DashboardSkelton() {
                     
                     <div className="flex gap-4 overflow-hidden md:grid md:grid-cols-3 md:gap-6">
                         {[1, 2, 3].map(col => (
-                            <div key={col} className="w-[85vw] sm:w-[350px] md:w-auto shrink-0 bg-gray-100/50 p-4 rounded-2xl border border-gray-200/60 h-[60vh]">
+                            <div key={col} className="w-[85vw] sm:w-[350px] md:w-auto shrink-0 bg-gray-200 p-4 rounded-2xl border border-gray-200/60 h-[60vh]">
                                 <div className="h-6 w-24 bg-gray-200 rounded-md animate-pulse mb-6"></div>
                                 {[1, 2, 3].map(card => (
                                     <div key={card} className="bg-white h-32 rounded-xl border border-gray-100 mb-4 animate-pulse"></div>
