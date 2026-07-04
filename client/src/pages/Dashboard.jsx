@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import { useTasks } from '../hooks/useTasks';
 import TaskModal from './TaskModal';
 import DashboardSkeleton from '../components/skelton/Dashboard';
+import Companion from '../components/Companion';
 
 export default function Dashboard() {
     const { tasks, loading, addTask, updateStatus, deleteTask, editTask } = useTasks();
@@ -67,9 +68,13 @@ export default function Dashboard() {
             <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 overflow-hidden flex flex-col h-[calc(100vh-70px)] md:h-auto">
 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 shrink-0">
+                    <div className="flex items-center gap-4">
+                        <Companion tasks={tasks} size="small" />
+                    
                     <div>
                         <h1 className="text-2xl sm:text-3xl font-black text-gray-900">Your Workflow</h1>
                         <p className="text-gray-500 text-sm sm:text-base mt-1">Manage your priorities and focus for today.</p>
+                        </div>
                     </div>
 
                     <div className="flex w-full md:w-auto gap-3 flex-col sm:flex-row">

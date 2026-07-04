@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import { Flame, CheckCircle, Target, User, ArrowLeft, X, Mail, Lock, ArrowRight, Settings, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProfileSkeleton from '../components/skelton/Profile';
+import Companion from '../components/Companion';
 
 export default function Profile() {
     const { user, logout, updateUser } = useContext(AuthContext);
@@ -66,7 +67,6 @@ export default function Profile() {
         }, 300); // Wait for animation to finish before resetting
     };
 
-    // --- SKELETON LOADER UI ---
     if (loading) { return <ProfileSkeleton />; }
 
     return (
@@ -81,13 +81,12 @@ export default function Profile() {
                     </Link>
                     <div>
                         <h1 className="text-2xl sm:text-3xl font-black text-gray-900">Profile</h1>
-                        <p className="text-gray-500 text-sm sm:text-base mt-1">Track your performance and manage your identity.</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
-                    {/* Left Column: Identity Card */}
+                    {/*left column*/}
                     <div className="md:col-span-1 space-y-6">
                         <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10"></div>
@@ -115,7 +114,7 @@ export default function Profile() {
                         </div>
                     </div>
 
-                    {/* Right Column: Gamification Stats */}
+                    {/*right column*/}
                     <div className="md:col-span-2 space-y-6">
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                             <div className="bg-white p-4 sm:p-5 rounded-3xl border border-gray-100 shadow-sm flex flex-col justify-center items-center text-center">
@@ -147,25 +146,25 @@ export default function Profile() {
                             <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
                                 Behavioral Insights <span className="bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded-full">BETA</span>
                             </h3>
-                            <div className="bg-gray-50 border border-dashed border-gray-200 rounded-2xl p-8 text-center flex flex-col items-center justify-center h-48">
+                            {/* <div className="bg-gray-50 border border-dashed border-gray-200 rounded-2xl p-8 text-center flex flex-col items-center justify-center h-48">
                                 <p className="text-gray-400 font-medium mb-2">Analyzing your workflow patterns...</p>
                                 <p className="text-sm text-gray-400">Your emotion-aware companion will appear here once enough data is gathered.</p>
-                            </div>
+                            </div> */}
+                            <Companion tasks={tasks} size="large" />
                         </div>
                     </div>
                 </div>
             </main>
 
-            {/* --- APPLE-STYLE SETTINGS MODAL --- */}
+            {/*settings modal */}
             <div className={`fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 sm:p-0 pointer-events-none`}>
                 
-                {/* Background Overlay */}
+                {/*bg overlay*/}
                 <div 
                     className={`absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ${isSettingsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`} 
                     onClick={closeSettings} 
                 />
 
-                {/* The Modal Container */}
                 <div 
                     className={`bg-white rounded-[2rem] shadow-2xl w-full max-w-md p-6 relative overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
                     origin-bottom md:origin-center
