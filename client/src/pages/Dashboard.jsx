@@ -58,6 +58,12 @@ export default function Dashboard() {
         (task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
+    const mobileTabs = [
+        { label: 'Later', value: 'stashed' },
+        { label: 'Today', value: 'active' },
+        { label: 'Done', value: 'cleared' },
+    ]
+
     if (loading) return <div><DashboardSkeleton /></div>;
 
     return (
@@ -127,13 +133,13 @@ export default function Dashboard() {
                         
                         {/*mobile navigation tabs*/}
                         <div className="md:hidden flex gap-2 mb-4 bg-gray-200/50 p-1 rounded-xl shrink-0">
-                            {['Stashed', 'Active', 'Cleared'].map((tab, idx) => (
+                            {mobileTabs.map((tab, idx) => (
                                 <button 
-                                    key={tab}
+                                    key={tab.value}
                                     onClick={() => scrollToTab(idx)}
                                     className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${activeTab === idx ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500'}`}
                                 >
-                                    {tab} ({tasks.filter(t => t.status === tab.toLowerCase()).length})
+                                    {tab.label} ({tasks.filter(t => t.status === tab.value).length})
                                 </button>
                             ))}
                         </div>
@@ -147,7 +153,7 @@ export default function Dashboard() {
                                 {/*column 1 stashed*/}
                                 <div className="w-[calc(100vw-32px)] sm:w-[350px] md:w-auto shrink-0 snap-center bg-gray-100/50 p-3 sm:p-4 rounded-2xl border border-gray-200/60 flex flex-col h-full overflow-hidden">
                                     <h2 className="hidden md:flex font-bold text-gray-700 mb-4 justify-between items-center">
-                                        Stashed <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">{filteredTasks.filter(t => t.status === 'stashed').length}</span>
+                                        Later <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">{filteredTasks.filter(t => t.status === 'stashed').length}</span>
                                     </h2>
                                     <Droppable droppableId="stashed">
                                         {(provided, snapshot) => (
@@ -170,7 +176,7 @@ export default function Dashboard() {
                                 {/*column 2 active*/}
                                 <div className="w-[calc(100vw-32px)] sm:w-[350px] md:w-auto shrink-0 snap-center bg-blue-50/50 p-3 sm:p-4 rounded-2xl border border-blue-100 flex flex-col h-full overflow-hidden">
                                     <h2 className="hidden md:flex font-bold text-blue-800 mb-4 justify-between items-center">
-                                        Focus <span className="bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full text-xs">{filteredTasks.filter(t => t.status === 'active').length}</span>
+                                        Today <span className="bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full text-xs">{filteredTasks.filter(t => t.status === 'active').length}</span>
                                     </h2>
                                     <Droppable droppableId="active">
                                         {(provided, snapshot) => (
@@ -193,7 +199,7 @@ export default function Dashboard() {
                                 {/*column 3 cleared*/}
                                 <div className="w-[calc(100vw-32px)] sm:w-[350px] md:w-auto shrink-0 snap-center bg-gray-100/50 p-3 sm:p-4 rounded-2xl border border-gray-200/60 flex flex-col h-full overflow-hidden opacity-70 hover:opacity-100 transition-opacity">
                                     <h2 className="hidden md:flex font-bold text-gray-500 mb-4 justify-between items-center">
-                                        Cleared <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">{filteredTasks.filter(t => t.status === 'cleared').length}</span>
+                                        Done <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">{filteredTasks.filter(t => t.status === 'cleared').length}</span>
                                     </h2>
                                     <Droppable droppableId="cleared">
                                         {(provided, snapshot) => (
