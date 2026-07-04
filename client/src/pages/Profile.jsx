@@ -102,11 +102,13 @@ export default function Profile() {
                         <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10"></div>
                             
-                            <div className="h-20 w-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl font-black mb-4 shadow-inner">
-                                {user?.name.charAt(0).toUpperCase()}
+                            <div className="flex flex-col items-center text-center">
+                                <div className="h-24 w-24 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl font-black mb-4 shadow-inner">
+                                    {user?.name.charAt(0).toUpperCase()}
+                                </div>
+                                <h2 className="text-2xl font-bold text-gray-900">{user?.name}</h2>
+                                <p className="text-md text-gray-500 mb-6 truncate">{user?.email}</p>
                             </div>
-                            <h2 className="text-xl font-bold text-gray-900">{user?.name}</h2>
-                            <p className="text-sm text-gray-500 mb-6 truncate">{user?.email}</p>
 
                             <div className="space-y-3">
                                 <button 
