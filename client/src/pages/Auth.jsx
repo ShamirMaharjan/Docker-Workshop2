@@ -328,7 +328,7 @@ export default function Auth() {
                                                 <input type="password" placeholder="Enter new password" value={forgotNewPassword} onChange={(e) => setForgotNewPassword(e.target.value)} className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none transition-all font-medium" required />
                                             </div>
                                         </div>
-                                        <button type="submit" disabled={forgotLoading} className="w-full bg-blue-600 hober:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md mt-6 diabled:bg-gray-400 flex items-center gap-2">
+                                        <button type="submit" disabled={forgotLoading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 sm:py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-2 disabled:bg-gray-400">
                                             <Shield className="h-4 w-4" /> {forgotLoading ? 'Verifying...' : 'Reset & Confirm'}
                                         </button>
                                     </form>
