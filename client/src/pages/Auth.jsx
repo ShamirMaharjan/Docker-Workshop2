@@ -278,7 +278,7 @@ export default function Auth() {
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} transition={{ type: "spring", duration: 0.5 }}
-                            className="bg-white roudned-[2rem] shadown-2xl w-full max-w-md p-6 sm:p-8 relative z-10"
+                            className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md p-6 sm:p-8 relative z-10"
                         >
                             <button onClick={() => { setIsForgotOpen(false); setForgotStep(1); setForgotError(''); }} className="absolute top-5 right-5 py-2 bg-gray-100 hover:bg-gray-200 transition-colors rounded-full text-gray-500">
                                 <X className="h-4 w-4" />
@@ -305,7 +305,7 @@ export default function Auth() {
                                     <form onSubmit={handleForgotConfirm} className="space-y-4">
                                         <div>
                                             <label className="text-[10px] font-bold tetx-gray-400 uppercase ml-1 block">Verification Code</label>
-                                            <input type="text" placeholder="• • • • • •" value={forgotOtp} maxLength={6} onChange={(e) => setForgotOtp(e.target.value)} className="w-full px-4 py-3 mt-1 bg-gray-50 border border-gray-200 shadow-sm rounded-xl outline-none text-center- font-black tracking-[0.5em] text-xl" required />
+                                            <input type="text" placeholder="• • • • • •" value={forgotOtp} maxLength={6} onChange={(e) => setForgotOtp(e.target.value)} className="w-full px-4 py-3 mt-1 bg-gray-50 border border-gray-200 shadow-sm rounded-xl outline-none text-center font-black tracking-[0.5em] text-xl" required />
                                         </div>
                                         <div className="mt-4">
                                             <label className="text-[10px] font-bold tetx-gray-400 uppercase ml-1 block">New Password</label>

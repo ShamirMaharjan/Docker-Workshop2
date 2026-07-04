@@ -137,10 +137,27 @@ const updatePasswordWithOTP = async (req, res) => {
     }
 };
 
+const deleteAccount = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        await Task.deleteMany({ userId });
+
+        await OTP.deleteMany({ userId });
+
+        await User.findByIdAndDelete(userId);
+
+        res.status(200).json({ message: "Account and all associated data permanently deleted." });
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting account data." });
+    }
+};
+
 module.exports = {
     getUserProfile,
     updateName,
     requestSecurityOTP,
     updateEmailWithOTP,
     updatePasswordWithOTP,
+    deleteAccount,
 };
