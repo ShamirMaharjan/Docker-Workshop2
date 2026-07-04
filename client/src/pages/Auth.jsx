@@ -156,6 +156,11 @@ export default function Auth() {
                                     required
                                 />
                             </div>
+                            <div className="flex justify-end mt-2">
+                                <button type="button" onClick={() => setIsForgotOpen(true)} className="text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors">
+                                    Forgot Password?
+                                </button>
+                            </div>
 
                             {/*turnstile widget*/}
                             {isLogin && (
