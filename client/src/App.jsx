@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, AuthContext } from './context/AuthContext';
+import { AuthProvider, AuthContext } from './context/authContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { NotificationProvider } from './context/NotificationContext';
 import NotificationToast from './components/NotificationToast';
