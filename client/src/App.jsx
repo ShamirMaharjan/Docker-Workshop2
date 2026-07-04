@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, AuthContext } from '../../context/AuthContext';
+import { AuthProvider, AuthContext } from './context/AuthContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { NotificationProvider } from '../../context/NotificationContext';
-import NotificationToast from '../../components/NotificationToast';
-import NotFound from '../../components/NotFound';
+import { NotificationProvider } from './context/NotificationContext';
+import NotificationToast from './components/NotificationToast';
+import NotFound from './components/NotFound';
 import { useContext } from 'react';
 import Auth from './pages/Auth'
 import Dashboard from './pages/Dashboard';
