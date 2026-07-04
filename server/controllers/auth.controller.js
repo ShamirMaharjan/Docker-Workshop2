@@ -6,6 +6,8 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const OTP = require('../models/otp.model');
 const sendEmail = require('../utils/sendEmail');
 
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+
 const registerUser = async (req, res) => {
     try {
         const { name, email, password, turnstileToken } = req.body;
@@ -150,18 +152,19 @@ const forgotPassword = async (req, res) => {
         );
 
         if (!emailSent) {
-            return res.status(500).json({ message: "Failed to sedn email." });
+            return res.status(500).json({ message: "Failed to send email." });
         }
 
         res.status(200).json({ message: "OTP sent successfully." });
     } catch (error) {
+        console.error("error during password reset request:", error);
         res.status(500).json({ message: "Server error during password reset request. Please try again later." });
     }
 };
 
 const resetPassword = async (req, res) => {
     try {
-        const { emai, otp, newPassword } = req.body;
+        const { email, otp, newPassword } = req.body;
 
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ message: "Invalid request." });
@@ -173,7 +176,7 @@ const resetPassword = async (req, res) => {
 
         //hash the new password
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash.apply(newPassword, salt);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
 
         //update user and delete the used otp
         await User.findByIdAndUpdate(user._id, { password: hashedPassword });
@@ -181,7 +184,8 @@ const resetPassword = async (req, res) => {
 
         res.status(200).json({ message: "Password reset successful. You can now log in." });
     } catch (error) {
-        res.status(500).json({ message: "Server errod uring password reset." });
+        console.error("error during password reset:", error);
+        res.status(500).json({ message: "Server error during password reset." });
     }
 };
 
