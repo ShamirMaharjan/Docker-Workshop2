@@ -10,6 +10,7 @@ export default function Auth() {
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
     const [error, setError] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
     const [loading, setLoading] = useState(false);
     const [turnstileToken, setTurnstileToken] = useState('');
 
@@ -29,6 +30,7 @@ export default function Auth() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setSuccessMsg('');
 
         if (!turnstileToken) {
             setError('Please complete the security check.');
@@ -54,6 +56,7 @@ export default function Auth() {
     const handleToggle = () => {
         setIsLogin(!isLogin);
         setError('');
+        setSuccessMsg('');
         setFormData({ name: '', email: '', password: '' });
     };
 
@@ -82,7 +85,7 @@ export default function Auth() {
             setForgotEmail('');
             setForgotOtp('');
             setForgotNewPassword('');
-            setError('Password reset successful! Please log in with your new password.')
+            setSuccessMsg('Password reset successful! Please log in with your new password.');
         } catch (err) {
             setForgotError(err.response?.data?.message || 'Failed to reset password.');
         } finally {
@@ -112,6 +115,11 @@ export default function Auth() {
                 {error && (
                     <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-semibold m-4 sm:mb-4 mb-0 border border-red-100 text-center animate-in fade-in">
                         {error}
+                    </div>
+                )}
+                {successMsg && (
+                    <div className="bg-green-50 text-green-600 p-3 rounded-xl text-sm font-semibold m-4 sm:mb-4 mb-0 border border-green-100 text-center animate-in fade-in">
+                        {successMsg}
                     </div>
                 )}
 

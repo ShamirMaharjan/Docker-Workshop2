@@ -147,7 +147,7 @@ const forgotPassword = async (req, res) => {
 
         const emailSent = await sendEmail(
             user.email,
-            "Commander Workflow - Password Reset Code",
+            "ToDo - Password Reset Code",
             `Your password reset code is: ${otpCode}\n\nThis code will expire in 5 minutes.`
         );
 
