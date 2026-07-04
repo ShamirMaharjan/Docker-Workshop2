@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,8 @@ export default function Auth() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [turnstileToken, setTurnstileToken] = useState('');
+
+    const turnstileRef = useRef(null);
     
     const { login, register, googleLogin } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -34,6 +36,7 @@ export default function Auth() {
         } catch (err) {
             setError(err.response?.data?.message || 'Authentication failed. Please try again.');
             setTurnstileToken('');
+            turnstileRef.current?.reset(); // reset the turnstile widget
         } finally {
             setLoading(false);
         }
@@ -116,6 +119,7 @@ export default function Auth() {
                             {isLogin && (
                                 <div className="flex justify-center pt-2">
                                     <Turnstile
+                                        ref={turnstileRef}
                                         siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
                                         onSuccess={(token) => setTurnstileToken(token)}
                                     />
@@ -194,6 +198,7 @@ export default function Auth() {
                             {!isLogin && (
                                 <div className="flex justify-center pt-2">
                                     <Turnstile
+                                        ref={turnstileRef}
                                         siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
                                         onSuccess={(token) => setTurnstileToken(token)}
                                     />
