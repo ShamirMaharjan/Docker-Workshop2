@@ -220,9 +220,9 @@ export default function Dashboard() {
 
             <button 
                 onClick={() => setIsModalOpen(true)}
-                className="md:hidden fixed bottom-6 right-6 h-14 w-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-[0_8px_30px_rgb(37,99,235,0.4)] flex items-center justify-center z-40 transition-transform active:scale-95"
+                className="md:hidden fixed bottom-8 right-6 h-14 w-22 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-[0_8px_30px_rgb(37,99,235,0.4)] flex items-center justify-center z-40 transition-transform active:scale-95"
             >
-                <Plus className="h-6 w-6" />
+                <Plus className="h-8 w-8" />
             </button>
         </div>
     );
