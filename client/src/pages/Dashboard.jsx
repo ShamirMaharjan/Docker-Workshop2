@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Plus, Search, X } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import TaskCard from '../components/TaskCard';
@@ -63,6 +63,19 @@ export default function Dashboard() {
         { label: 'Today', value: 'active' },
         { label: 'Done', value: 'cleared' },
     ]
+
+    useEffect(() => {
+        const hasActive = tasks.some(t => t.status === 'active');
+        const hasStashed = tasks.some(t => t.status === 'stashed');
+
+        if (scrollContainerRef.current) {
+            if (hasActive) {
+                scrollToTab(1);
+            } else if (hasStashed) {
+                scrollToTab(0);
+            }
+        };
+    }, [tasks]);
 
     if (loading) return <div><DashboardSkeleton /></div>;
 

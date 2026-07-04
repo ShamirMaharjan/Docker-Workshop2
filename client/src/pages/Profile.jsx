@@ -165,7 +165,7 @@ export default function Profile() {
             </main>
 
             {/*settings*/}
-            <div className={`fixed inset-0 z-40 flex items-end sm:items-center justify-center p-4 sm:p-0 pointer-events-none`}>
+            <div className={`fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 sm:p-0 pointer-events-none`}>
                 <div className={`absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 ${isSettingsOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`} onClick={closeSettings} />
 
                 <div className={`bg-white rounded-[2rem] shadow-2xl w-full max-w-md p-6 relative overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-bottom md:origin-center ${isSettingsOpen ? 'scale-100 opacity-100 pointer-events-auto translate-y-0' : 'scale-95 opacity-0 translate-y-24 md:translate-y-0'}`}>

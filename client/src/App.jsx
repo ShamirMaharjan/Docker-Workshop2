@@ -7,6 +7,7 @@ import { useContext } from 'react';
 import Auth from './pages/Auth'
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import Home from './pages/Home';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -22,7 +23,8 @@ export default function App() {
           <NotificationToast />
           <Router>
             <Routes>
-              <Route path="/" element={<Auth />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/auth" element={<Auth />} />
               <Route
                 path="/dashboard"
                 element={
