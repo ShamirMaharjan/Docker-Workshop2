@@ -8,7 +8,7 @@ import Auth from './pages/Auth'
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
-import NotFound from '../../components/NotFound';
+import NotFound from '../src/components/NotFound';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
