@@ -91,8 +91,24 @@ export default function Auth() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans overflow-hidden">
-            <div className="bg-white rounded-3xl shadow-xl w-full max-w-md border border-gray-100 overflow-hidden relative">
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans overflow-hidden relative">
+
+            <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px] opacity-80 -z-10"></div>
+            <motion.div 
+                animate={{ x: [0, 40, 0], y: [0, 50, 0], scale: [1, 1.2, 1] }} 
+                transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }} 
+                className="absolute top-[-10%] right-[-10%] w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-blue-500/20 rounded-full blur-[100px] -z-10 pointer-events-none" 
+            />
+            
+            {/* Bottom Left Orb - Drifts opposite direction */}
+            <motion.div 
+                animate={{ x: [0, -40, 0], y: [0, -50, 0], scale: [1, 1.2, 1] }} 
+                transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", delay: 1 }} 
+                className="absolute bottom-[-10%] left-[-10%] w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-cyan-400/20 rounded-full blur-[100px] -z-10 pointer-events-none" 
+            />
+
+            {/* Auth Card (Added stronger shadow so it pops off the background) */}
+            <div className="bg-white rounded-3xl shadow-2xl shadow-blue-900/10 w-full max-w-md border border-gray-100 overflow-hidden relative z-10">
                 
                 {error && (
                     <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-semibold mb-6 border border-red-100 text-center animate-in fade-in">
