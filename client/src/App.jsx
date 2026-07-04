@@ -8,6 +8,7 @@ import Auth from './pages/Auth'
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
+import NotFound from './components/NotFound';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -41,6 +42,7 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+            <Route element={<NotFound />} path="*" />
             </Routes>
           </Router>
         </AuthProvider>

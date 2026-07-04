@@ -91,27 +91,26 @@ export default function Auth() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans overflow-hidden relative">
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans overflow-hidden relative z-0">
 
-            <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px] opacity-80 -z-10"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:24px_24px] opacity-80 pointer-events-none"></div>
             <motion.div 
                 animate={{ x: [0, 40, 0], y: [0, 50, 0], scale: [1, 1.2, 1] }} 
                 transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }} 
                 className="absolute top-[-10%] right-[-10%] w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-blue-500/20 rounded-full blur-[100px] -z-10 pointer-events-none" 
             />
             
-            {/* Bottom Left Orb - Drifts opposite direction */}
+            {/* bottom left orb */}
             <motion.div 
                 animate={{ x: [0, -40, 0], y: [0, -50, 0], scale: [1, 1.2, 1] }} 
                 transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", delay: 1 }} 
                 className="absolute bottom-[-10%] left-[-10%] w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-cyan-400/20 rounded-full blur-[100px] -z-10 pointer-events-none" 
             />
 
-            {/* Auth Card (Added stronger shadow so it pops off the background) */}
             <div className="bg-white rounded-3xl shadow-2xl shadow-blue-900/10 w-full max-w-md border border-gray-100 overflow-hidden relative z-10">
                 
                 {error && (
-                    <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-semibold mb-6 border border-red-100 text-center animate-in fade-in">
+                    <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-semibold m-4 sm:mb-4 mb-0 border border-red-100 text-center animate-in fade-in">
                         {error}
                     </div>
                 )}
@@ -122,13 +121,13 @@ export default function Auth() {
                     style={{ transform: isLogin ? 'translateX(0)' : 'translateX(-50%)' }}
                 >
                     {/*login view left side*/}
-                    <div className="w-1/2 shrink-0 px-8 pt-8">
-                        <div className="mb-8 text-center">
-                            <h2 className="text-3xl font-black text-gray-900 mb-2">Welcome Back</h2>
-                            <p className="text-gray-500 text-sm">Log in to manage your tasks.</p>
+                    <div className="w-1/2 shrink-0 px-6 sm:px-8 pt-6 sm:pt-6">
+                        <div className="mb-5 sm:mb-8 text-center">
+                            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-1 sm:mb-2">Welcome Back</h2>
+                            <p className="text-gray-500 text-xs sm:text-sm">Log in to manage your tasks.</p>
                         </div>
 
-                        <div className="mb-6 flex justify-center w-full">
+                        <div className="mb-3 sm:mb-6 flex justify-center w-full">
                             <GoogleLogin
                                 onSuccess={async (res) => {
                                     try { await googleLogin(res.credential); navigate('/dashboard'); } 
@@ -143,30 +142,30 @@ export default function Auth() {
                             />
                         </div>
 
-                        <div className="relative flex py-2 items-center mb-6">
+                        <div className="relative flex py-2 items-center mb-3 sm:mb-6">
                             <div className="flex-grow border-t border-gray-200"></div>
-                            <span className="flex-shrink-0 mx-4 text-gray-400 text-sm font-bold uppercase tracking-wider">Or</span>
+                            <span className="flex-shrink-0 mx-2 sm:mx-4 text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-wider">Or</span>
                             <div className="flex-grow border-t border-gray-200"></div>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="relative">
-                                <Mail className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+                                <Mail className="absolute left-4 top-4.5 sm:top-4 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                                 <input
                                     type="email"
                                     placeholder="Email Address"
-                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 transition-all font-medium"
+                                    className="w-full pl-12 pr-4 py-3 sm:py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none transition-all font-medium sm:text-md text-sm"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     required
                                 />
                             </div>
                             <div className="relative">
-                                <Lock className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+                                <Lock className="absolute left-4 top-4 sm:top-4 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                                 <input
                                     type="password"
                                     placeholder="Password"
-                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 transition-all font-medium"
+                                    className="w-full pl-12 pr-4 py-3 sm:py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none transition-all font-medium sm:text-md text-sm"
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                     required
@@ -188,7 +187,7 @@ export default function Auth() {
                                     />
                                 </div>
                             )}
-                            <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-2 disabled:bg-gray-400">
+                            <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 sm:py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-2 disabled:bg-gray-400">
                                 {loading ? 'Processing...' : 'Log In'} <ChevronRight className="h-5 w-5" />
                             </button>
                         </form>
@@ -196,12 +195,12 @@ export default function Auth() {
 
                     {/*register view right side*/}
                     <div className="w-1/2 shrink-0 px-8 pt-8">
-                        <div className="mb-8 text-center">
-                            <h2 className="text-3xl font-black text-gray-900 mb-2">Create Account</h2>
-                            <p className="text-gray-500 text-sm">Join to start organizing your tasks.</p>
+                        <div className="mb-5 sm:mb-8  text-center">
+                            <h2 className="text-2xl sm:text-3xl font-black text-gray-900 mb-1 sm:mb-2">Create Account</h2>
+                            <p className="text-gray-500 text-xs sm:text-sm">Join to start organizing your tasks.</p>
                         </div>
 
-                        <div className="mb-6 flex justify-center w-full">
+                        <div className="mb-3 sm:mb-6 flex justify-center w-full">
                             <GoogleLogin
                                 onSuccess={async (res) => {
                                     try { await googleLogin(res.credential); navigate('/dashboard'); } 
@@ -216,41 +215,41 @@ export default function Auth() {
                             />
                         </div>
 
-                        <div className="relative flex py-2 items-center mb-6">
+                        <div className="relative flex py-2 items-center sm:mb-6 mb-3">
                             <div className="flex-grow border-t border-gray-200"></div>
-                            <span className="flex-shrink-0 mx-4 text-gray-400 text-sm font-bold uppercase tracking-wider">Or</span>
+                            <span className="flex-shrink-0 mx-2 sm:mx-4 text-gray-400 text-[10px] sm:text-sm font-bold uppercase tracking-wider">Or</span>
                             <div className="flex-grow border-t border-gray-200"></div>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="relative">
-                                <User className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+                                <User className="absolute left-4 top-4.5 sm:top-4 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                                 <input
                                     type="text"
                                     placeholder="Full Name"
-                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 transition-all font-medium"
+                                    className="w-full pl-12 pr-4 py-3 sm:py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none transition-all font-medium sm:text-md text-sm"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     required={!isLogin}
                                 />
                             </div>
                             <div className="relative">
-                                <Mail className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+                                <Mail className="absolute left-4 top-4 sm:top-4 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                                 <input
                                     type="email"
                                     placeholder="Email Address"
-                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 transition-all font-medium"
+                                    className="w-full pl-12 pr-4 py-3 sm:py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none transition-all font-medium sm:text-md text-sm"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     required={!isLogin}
                                 />
                             </div>
                             <div className="relative">
-                                <Lock className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+                                <Lock className="absolute left-4 top-4 sm:top-4 h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                                 <input
                                     type="password"
                                     placeholder="Password"
-                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-500 transition-all font-medium"
+                                    className="w-full pl-12 pr-4 py-3 sm:py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none transition-all font-medium sm:text-md text-sm"
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                     required={!isLogin}
@@ -267,7 +266,7 @@ export default function Auth() {
                                     />
                                 </div>
                             )}
-                            <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-2 disabled:bg-gray-400">
+                            <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 sm:py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-2 disabled:bg-gray-400">
                                 {loading ? 'Processing...' : 'Continue'} <ChevronRight className="h-5 w-5" />
                             </button>
                         </form>
@@ -275,7 +274,7 @@ export default function Auth() {
                 </div>
 
                 {/*static bottom toggle*/}
-                <p className="text-center mt-8 text-sm text-gray-500 relative z-10 bg-white pb-4">
+                <p className="text-center sm:mt-6 mt-3 text-sm text-gray-500 relative z-10 bg-white pb-4">
                     {isLogin ? "Don't have an account? " : "Already have an account? "}
                     <button type="button" onClick={handleToggle} className="text-blue-600 font-bold hover:underline focus:outline-none">
                         {isLogin ? 'Sign up' : 'Log in'}
