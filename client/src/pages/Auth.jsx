@@ -1,5 +1,5 @@
 import { useState, useContext, useRef } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../context/authContext';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ChevronRight, Shield, X } from 'lucide-react';

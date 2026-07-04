@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../context/authContext';
 import { LayoutDashboard, LogOut, UserCircle } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 
