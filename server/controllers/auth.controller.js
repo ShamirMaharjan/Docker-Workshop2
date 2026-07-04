@@ -3,6 +3,8 @@ const User = require('../models/user.model');
 const generateToken = require('../utils/generateToken');
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const OTP = require('../models/otp.model');
+const sendEmail = require('../utils/sendEmail');
 
 const registerUser = async (req, res) => {
     try {
@@ -126,4 +128,61 @@ const verifyTurnstile = async (token) => {
     }
 };
 
-module.exports = { registerUser, loginUser, googleLogin };
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email })
+
+        //snet otp wihtout revleaing if the email exists or not
+        if (!user) {
+            return res.status(200).json({ message: "If that email exists, an OTP has been sent. " });
+        }
+
+        await OTP.deleteMany({ userId: user._id });
+
+        const otpCode = generateOTP();
+        await OTP.create({ userId: user._id, otp: otpCode });
+
+        const emailSent = await sendEmail(
+            user.email,
+            "Commander Workflow - Password Reset Code",
+            `Your password reset code is: ${otpCode}\n\nThis code will expire in 5 minutes.`
+        );
+
+        if (!emailSent) {
+            return res.status(500).json({ message: "Failed to sedn email." });
+        }
+
+        res.status(200).json({ message: "OTP sent successfully." });
+    } catch (error) {
+        res.status(500).json({ message: "Server error during password reset request. Please try again later." });
+    }
+};
+
+const resetPassword = async (req, res) => {
+    try {
+        const { emai, otp, newPassword } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).json({ message: "Invalid request." });
+
+        const validOtp = await OTP.findOne({ userId: user._id, otp });
+        if (!validOtp) {
+            return res.status(400).json({ message: "Invalid or expired OTP." });
+        }
+
+        //hash the new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash.apply(newPassword, salt);
+
+        //update user and delete the used otp
+        await User.findByIdAndUpdate(user._id, { password: hashedPassword });
+        await OTP.deleteOne({ _id: validOtp._id });
+
+        res.status(200).json({ message: "Password reset successful. You can now log in." });
+    } catch (error) {
+        res.status(500).json({ message: "Server errod uring password reset." });
+    }
+};
+
+module.exports = { registerUser, loginUser, googleLogin, forgotPassword, resetPassword };

@@ -47,8 +47,16 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('todo_user', JSON.stringify(res.data.user));
     };
 
+    const requestPasswordReset = async (email) => {
+        await api.post('/auth/forgot-password', { email });
+    };
+
+    const confirmPasswordReset = async (email, otp, newPassword) => {
+        await api.post('/auth/reset-password', { email, otp, newPassword })
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, loading, updateUser, googleLogin }}>
+        <AuthContext.Provider value={{ user, login, register, logout, loading, updateUser, googleLogin, requestPasswordReset, confirmPasswordReset }}>
             {children}
         </AuthContext.Provider>
     );
