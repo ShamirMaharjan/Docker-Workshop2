@@ -73,6 +73,17 @@ export const useProfile = () => {
         }
     };
 
+    const deleteAccount = async () => {
+        try {
+            await api.delete('/users/profile');
+            showNotification('Account permanently deleted', 'success');
+            return true;
+        } catch (error) {
+            showNotification('Failed to delete account', 'error', error);
+            return false;
+        }
+    };
+
     return {
         profileData,
         loading,
@@ -80,5 +91,6 @@ export const useProfile = () => {
         requestOTP,
         updateEmail,
         updatePassword,
+        deleteAccount,
     };
 };
