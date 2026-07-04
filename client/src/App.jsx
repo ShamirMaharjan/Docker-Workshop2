@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, AuthContext } from './context/AuthContext';
+import { AuthProvider, AuthContext } from '././context/AuthContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { NotificationProvider } from './context/NotificationContext';
-import NotificationToast from './components/NotificationToast';
+import { NotificationProvider } from '../../context/NotificationContext';
+import NotificationToast from '../../components/NotificationToast';
 import { useContext } from 'react';
 import Auth from './pages/Auth'
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
-import NotFound from './components/NotFound';
+import NotFound from '../../components/NotFound';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
