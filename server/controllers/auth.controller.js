@@ -40,7 +40,7 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     try {
-        const { email, password, tunrstileToken } = req.body;
+        const { email, password, turnstileToken } = req.body;
 
         if (!turnstileToken) return res.status(400).json({ message: "Security verification failed." });
         const isCaptchValid = await verifyTurnstile(turnstileToken);
@@ -126,4 +126,4 @@ const verifyTurnstile = async (token) => {
     }
 };
 
-module.exports = { registerUser, loginUser, googleLogin, verifyTurnstile };
+module.exports = { registerUser, loginUser, googleLogin };
