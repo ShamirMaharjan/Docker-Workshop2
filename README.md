@@ -1,10 +1,10 @@
-# Your Workspace
+# ToDo App
 
-A high-fidelity, emotion-aware task management pipeline built on the MERN stack. Engineered to mitigate cognitive overload through a ruthless "Later, Today, Done" architecture and real-time behavioral feedback.
+A high-fidelity, emotion-aware task management app built on the MERN stack. Engineered to mitigate cognitive overload through a ruthless "Later, Today, Done" architecture and real-time behavioral feedback.
 
 Developed by **Thaveesha Vithana**.
 
-![Commander Workspace Preview](client/public/img_1.png)
+![Todo App Preview](client/public/img_1.png)
 
 ## Base
 Traditional to-do applications function as infinite, anxiety-inducing backlogs. This workspace is designed like a flight deck. It physically limits active cognitive load, forces prioritization, and utilizes an animated companion node to provide real-time telemetry on user stress levels based on active task volume.
