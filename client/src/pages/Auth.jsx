@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import { AuthContext } from '../context/authContext';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,7 @@ export default function Auth() {
 
     const turnstileRef = useRef(null);
     
-    const { login, register, googleLogin, requestPasswordReset, confirmPasswordReset } = useContext(AuthContext);
+    const { user, login, register, googleLogin, requestPasswordReset, confirmPasswordReset } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [isForgotOpen, setIsForgotOpen] = useState(false);
@@ -92,6 +92,13 @@ export default function Auth() {
             setForgotLoading(false);
         }
     };
+
+    // auto redirect users to dashboard if they already logged in
+    useEffect(() => {
+        if (user) {
+            navigate('/dashboard', { replace: true });
+        }
+    }, [user, navigate])
 
     return (
         <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans overflow-hidden relative z-0">
