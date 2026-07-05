@@ -1,10 +1,15 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles, Lock, Bot } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/authContext';
 import Companion from '../components/Companion';
 
 export default function Home() {
+    const { user } = useContext(AuthContext);
+    const navigate = useNavigate();
+
     const [demoTasks, setDemoTasks] = useState([]);
 
     const simulateToday = () => setDemoTasks([{ status: 'active', updatedAt: Date.now() }]);
@@ -19,6 +24,13 @@ export default function Home() {
         "/img_4.png",
         "/img_5.png"
     ];
+
+    // auto redirect users to dashboard if they already logged in
+    useEffect(() => {
+        if (user) {
+            navigate('/dashboard', { replace: true });
+        }
+    }, [user, navigate])
 
     return (
         <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
