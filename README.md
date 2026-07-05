@@ -62,7 +62,12 @@ npm run dev
 
 This application is deployed on a Linux Virtual Private Server (VPS) utilizing a great web server architecture. The deployment strategy physically separates the static frontend from the Node.js API, utilizing Nginx as a reverse proxy.
 
-### 1. Frontend: Static Build
+### 1. DNS Configuration (Cloudflare)
+To route traffic to the VPS without interfering with existing services on the root domain, a subdomain (todo.mk-printers.com.lk) was established via Cloudflare.
+- A Record: Created an 'A' record mapping the `todo` hostname to the VPS's public IPv4 address.
+- Proxy Status: Cloudflare Proxy was enabled to leverage Cloudflare's CDN, DDoS protection, and SSL termination before traffic ever reaches the origin server.
+
+### 2. Frontend: Static Build
 The React frontend is compiled into highly optimized static assets. These assets are served directly by Nginx, completely bypassing Node.js for static file delivery to ensure maximum performance.
 ```bash
 cd client
@@ -70,7 +75,7 @@ npm run build
 # The resulting /dist folder is placed at /var/www/todo/client/dist
 ```
 
-### 2. Backend: Process Management (PM2)
+### 3. Backend: Process Management (PM2)
 The Node.js/Express API runs persistently in the background on port `5010`. It is managed by **PM2**, which ensures the application automatically restarts in the event of a crash or a server reboot.
 ```bash
 cd server
@@ -80,7 +85,7 @@ pm2 save
 pm2 startup
 ```
 
-### 3. Nginx Reverse Proxy Configuration
+### 4. Nginx Reverse Proxy Configuration
 Nginx acts as the primary traffic controller. It intercepts incoming requests to the domain and routes them intelligently:
 *   Root traffic (`/`) is directed to the React `dist` folder. The `try_files` directive ensures React Router handles client-side routing without throwing 404 errors.
 *   API traffic (`/api/`) is reverse-proxied to the internal Node.js process running on port `5010`.
@@ -122,6 +127,6 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
-### 4. Security & SSL Setup
+### 5. Security & SSL Setup
 *   **Certbot (Let's Encrypt):** Used to generate SSL certificates and automatically update the Nginx configuration to force HTTPS redirection.
 *   **Cloudflare DNS & SSL:** The domain utilizes Cloudflare's DNS. The SSL/TLS encryption mode is set to **"Full (Strict)"** to ensure an unbroken, end-to-end encrypted connection between the client, Cloudflare, and the Nginx origin server, preventing infinite redirect loops and Mixed Content errors.
