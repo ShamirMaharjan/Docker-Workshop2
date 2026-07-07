@@ -38,7 +38,6 @@ You can find a `.env.example` file in both `/client` and `/server` directory
 - Create a `.env` file in the `/server` directory, **copy & paste** the details from`/server/.env.example`.
 - Manually enter the values for `EMAIL_USER` and `USER_PASS`. Values for them can't be provided even for development due to security reasons.
 
-**(ALL PROVIDED VALUES ARE FOR DEVELOPEMNT AND TESTING PURPOSES ONLY. THEY WILL EXPIRE ON 08/07/2026 FOR SECURITY REASONS, REPLACE THEM ON OR BEFORE)**
 
 
 ### 2. Installation and Execution
