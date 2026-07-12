@@ -93,7 +93,7 @@ export default function Profile() {
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <div>
-                        <h1 className="text-2xl sm:text-3xl font-black text-gray-900">Your profile</h1>
+                        <h1 className="text-2xl sm:text-3xl font-black text-gray-900">Profile</h1>
                     </div>
                 </div>
 

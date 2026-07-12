@@ -209,7 +209,7 @@ export default function Dashboard() {
                                     </Droppable>
                                 </div>
 
-                                {/*column 3 cleared*/}
+                                {/* Column 3 cleared */}
                                 <div className="w-[calc(100vw-32px)] sm:w-[350px] md:w-auto shrink-0 snap-center bg-gray-100/50 p-3 sm:p-4 rounded-2xl border border-gray-200/60 flex flex-col h-full overflow-hidden opacity-70 hover:opacity-100 transition-opacity">
                                     <h2 className="hidden md:flex font-bold text-gray-500 mb-4 justify-between items-center">
                                         Done <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs">{filteredTasks.filter(t => t.status === 'cleared').length}</span>
