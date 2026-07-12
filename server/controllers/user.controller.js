@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
+// get user profile
 const getUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user._id).select('-password');
@@ -50,6 +51,7 @@ const getUserProfile = async (req, res) => {
     }
 };
 
+// update user name
 const updateName = async (req, res) => {
     try {
         const { name } = req.body;
@@ -67,6 +69,7 @@ const updateName = async (req, res) => {
     }
 };
 
+// request a security OTP for email or password update
 const requestSecurityOTP = async (req, res) => {
     try {
         // delete any existing OTPs for this user to prevent spam
@@ -91,6 +94,7 @@ const requestSecurityOTP = async (req, res) => {
     }
 };
 
+// update email with OTP verification
 const updateEmailWithOTP = async (req, res) => {
     try {
         const { otp, newEmail } = req.body;
@@ -115,6 +119,7 @@ const updateEmailWithOTP = async (req, res) => {
     }
 };
 
+// update password with OTP verification
 const updatePasswordWithOTP = async (req, res) => {
     try {
         const { otp, newPassword } = req.body;
@@ -137,6 +142,7 @@ const updatePasswordWithOTP = async (req, res) => {
     }
 };
 
+// delete user account and all associated data
 const deleteAccount = async (req, res) => {
     try {
         const userId = req.user._id;
