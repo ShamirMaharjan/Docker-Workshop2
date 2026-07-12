@@ -5,7 +5,7 @@ const authLimiter = rateLimit({
     max: 10,
     message: 'Too many requests from this IP, please try again after 15 minutes',
     standardHeaders: true,
-    legacyHeaders: false,
+    legacyHeaders: false, // disable the `X-RateLimit-*` headers
 });
 
 module.exports = { authLimiter };
