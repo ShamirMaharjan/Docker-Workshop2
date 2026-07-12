@@ -8,6 +8,7 @@ const sendEmail = require('../utils/sendEmail');
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
+// register a new user
 const registerUser = async (req, res) => {
     try {
         const { name, email, password, turnstileToken } = req.body;
@@ -42,6 +43,7 @@ const registerUser = async (req, res) => {
     }
 };
 
+// login a user
 const loginUser = async (req, res) => {
     try {
         const { email, password, turnstileToken } = req.body;

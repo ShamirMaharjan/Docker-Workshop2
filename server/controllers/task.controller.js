@@ -1,5 +1,6 @@
 const Task = require('../models/task.model');
 
+// get all tasks for a user
 const getTasks = async (req, res) => {
     try {
         const tasks = await Task.find({ userId: req.user._id }).sort({ createdAt: -1 });
@@ -9,6 +10,7 @@ const getTasks = async (req, res) => {
     }
 };
 
+// create a new task
 const createTask = async (req, res) => {
     try {
         const { title, description, dueDate, status, priority } = req.body;
