@@ -84,7 +84,6 @@ const googleLogin = async (req, res) => {
         const payload = ticket.getPayload();
         const { email, name, sub: googleId } = payload;
 
-        // check if user already exists
         let user = await User.findOne({ email });
 
         if (user) {
