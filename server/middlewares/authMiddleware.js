@@ -4,7 +4,7 @@ const User = require('../models/user.model');
 const protect = async (req, res, next) => {
     let token = req.cookies.token;
 
-    if (token) {
+    if (token) {  // added new comments hear for better git history
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
