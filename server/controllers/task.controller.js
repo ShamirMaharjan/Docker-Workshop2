@@ -33,6 +33,7 @@ const createTask = async (req, res) => {
     }
 };
 
+// update a task
 const updateTask = async (req, res) => {
     try {
         const task = await Task.findOneAndUpdate(
@@ -49,6 +50,7 @@ const updateTask = async (req, res) => {
     }
 };
 
+// delete a task
 const deleteTask = async (req, res) => {
     try {
         const task = await Task.findOneAndDelete({ _id: req.params.id, userId: req.user._id });

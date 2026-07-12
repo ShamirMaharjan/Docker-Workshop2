@@ -73,6 +73,7 @@ const loginUser = async (req, res) => {
     }
 };
 
+// google login
 const googleLogin = async (req, res) => {
     try {
         const { credential } = req.body;
@@ -114,6 +115,7 @@ const googleLogin = async (req, res) => {
     }
 };
 
+// verify turnstile
 const verifyTurnstile = async (token) => {
     try {
         const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
@@ -131,6 +133,7 @@ const verifyTurnstile = async (token) => {
     }
 };
 
+// forgot password
 const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
@@ -163,6 +166,7 @@ const forgotPassword = async (req, res) => {
     }
 };
 
+// reset password
 const resetPassword = async (req, res) => {
     try {
         const { email, otp, newPassword } = req.body;
