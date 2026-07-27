@@ -10,7 +10,7 @@ const userRoutes = require('./routes/user.route');
 const app = express();
 const PORT = process.env.PORT;
 
-app.set('trust proxy', 1); // trust first proxy for rate limiting and secure cookies
+app.set('trust proxy', true);
 
 app.use(cors({
     origin: process.env.CLIENT_URL,
