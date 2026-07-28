@@ -11,11 +11,7 @@ const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString()
 // register a new user
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password, turnstileToken } = req.body;
-
-        if (!turnstileToken) return res.status(400).json({ message: "Security verification failed." });
-        const isCaptchValid = await verifyTurnstile(turnstileToken);
-        if (!isCaptchValid) return res.status(400).json({ message: "Security verification failed." });
+        const { name, email, password } = req.body;
 
         const userExists = await User.findOne({ email });
         if (userExists) {
@@ -46,11 +42,7 @@ const registerUser = async (req, res) => {
 // login a user
 const loginUser = async (req, res) => {
     try {
-        const { email, password, turnstileToken } = req.body;
-
-        if (!turnstileToken) return res.status(400).json({ message: "Security verification failed." });
-        const isCaptchValid = await verifyTurnstile(turnstileToken);
-        if (!isCaptchValid) return res.status(400).json({ message: "Security verification failed." });
+        const { email, password } = req.body;
         
         const user = await User.findOne({ email });
         if (!user) {
@@ -112,24 +104,6 @@ const googleLogin = async (req, res) => {
     } catch (error) {
         console.error("google auth error", error);
         res.status(401).json({ message: "Google authentication failed." });
-    }
-};
-
-// verify turnstile
-const verifyTurnstile = async (token) => {
-    try {
-        const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-            method: 'POST',
-            body: new URLSearchParams({
-                secret: process.env.TURNSTILE_SECRET_KEY,
-                response: token
-            })
-        });
-        const data = await response.json();
-        return data.success;
-    } catch (error) {
-        console.error("{turnstile verification error", error);
-        return false;
     }
 };
 
