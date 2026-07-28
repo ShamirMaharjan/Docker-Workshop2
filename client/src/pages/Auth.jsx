@@ -1,9 +1,8 @@
-import { useState, useContext, useRef, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/authContext';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ChevronRight, Shield, X } from 'lucide-react';
-import { Turnstile } from '@marsidev/react-turnstile';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Auth() {
@@ -12,10 +11,6 @@ export default function Auth() {
     const [error, setError] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
     const [loading, setLoading] = useState(false);
-    const [turnstileToken, setTurnstileToken] = useState('');
-
-    const turnstileRef = useRef(null);
-    
     const { user, login, register, googleLogin, requestPasswordReset, confirmPasswordReset } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -32,22 +27,16 @@ export default function Auth() {
         setError('');
         setSuccessMsg('');
 
-        if (!turnstileToken) {
-            setError('Please complete the security check.');
-            return;
-        }
         setLoading(true);
         try {
             if (isLogin) {
-                await login(formData.email, formData.password, turnstileToken);
+                await login(formData.email, formData.password);
             } else {
-                await register(formData.name, formData.email, formData.password, turnstileToken);
+                await register(formData.name, formData.email, formData.password);
             }
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Authentication failed. Please try again.');
-            setTurnstileToken('');
-            turnstileRef.current?.reset(); // reset the turnstile widget
         } finally {
             setLoading(false);
         }
@@ -192,16 +181,6 @@ export default function Auth() {
                                 </button>
                             </div>
 
-                            {/*turnstile widget*/}
-                            {isLogin && (
-                                <div className="flex justify-center pt-2">
-                                    <Turnstile
-                                        ref={turnstileRef}
-                                        siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
-                                        onSuccess={(token) => setTurnstileToken(token)}
-                                    />
-                                </div>
-                            )}
                             <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 sm:py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-2 disabled:bg-gray-400">
                                 {loading ? 'Processing...' : 'Log In'} <ChevronRight className="h-5 w-5" />
                             </button>
@@ -271,16 +250,6 @@ export default function Auth() {
                                 />
                             </div>
 
-                            {/*turnstile widget*/}
-                            {!isLogin && (
-                                <div className="flex justify-center pt-2">
-                                    <Turnstile
-                                        ref={turnstileRef}
-                                        siteKey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
-                                        onSuccess={(token) => setTurnstileToken(token)}
-                                    />
-                                </div>
-                            )}
                             <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 sm:py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md mt-2 disabled:bg-gray-400">
                                 {loading ? 'Processing...' : 'Continue'} <ChevronRight className="h-5 w-5" />
                             </button>

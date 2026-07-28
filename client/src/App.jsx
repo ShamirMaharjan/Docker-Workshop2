@@ -10,11 +10,11 @@ import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
 
-const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useContext(AuthContext);
-  if (loading) return <div className="min-h-screen bg-slate-900 flex items-center justify-center text-amber-500">Loading...</div>;
-  return user ? children : <Navigate to="/" />;
-};
+// const ProtectedRoute = ({ children }) => {
+//   const { user, loading } = useContext(AuthContext);
+//   if (loading) return <div className="min-h-screen bg-slate-900 flex items-center justify-center text-amber-500">Loading...</div>;
+//   return user ? children : <Navigate to="/" />;
+// };
 
 export default function App() {
   return (
@@ -29,17 +29,14 @@ export default function App() {
               <Route
                 path="/dashboard"
                 element={
-                  <ProtectedRoute>
                     <Dashboard />
-                  </ProtectedRoute>
+
                 }
               />
               <Route
                 path="/profile"
                 element={
-                  <ProtectedRoute>
                     <Profile />
-                  </ProtectedRoute>
                 }
               />
             <Route element={<NotFound />} path="*" />
