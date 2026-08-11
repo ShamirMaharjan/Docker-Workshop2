@@ -1,86 +1,22 @@
-name: CI/CD - Build, Push, Deploy.
+name: Build basic job demo
 
-# --- EVENT: what triggers this workflow ---
 on:
+  workflow_dispatch:
   push:
-    branches: [main]        # runs every time you push to main
-  workflow_dispatch:        # also lets you trigger it manually from the Actions tab
-
-# --- Values reused across jobs/steps ---
-env:
-  SERVER_IMAGE: mern-server-deploy
-  CLIENT_IMAGE: mern-client-deploy
+    branches: [main]
 
 jobs:
-  # ---------------------------------------------------------
-  # JOB 1: Build the Docker images (client + server) and push
-  #        both to Docker Hub. Uses a "matrix" so both builds
-  #        run in parallel on their own runner.
-  # ---------------------------------------------------------
-  build-and-push:
-    name: Build & Push (${{ matrix.service }})
-    runs-on: ubuntu-latest        # hosted runner: a fresh Ubuntu VM
-
-    strategy:
-      matrix:
-        # each entry below spins up its own copy of this job
-        include:
-          - service: server
-            context: ./server
-            image: mern-server-deploy
-          - service: client
-            context: ./client
-            image: mern-client-deploy
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        # pulls your repo's code onto the runner, since the runner starts empty
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-        # DOCKERHUB_TOKEN = an access token (not your real password),
-        # generated at hub.docker.com -> Account Settings -> Security
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        # enables more efficient/cached multi-platform builds
-
-      - name: Build and push ${{ matrix.service }} image
-        uses: docker/build-push-action@v5
-        with:
-          context: ${{ matrix.context }}       # ./server or ./client
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
-
-  # ---------------------------------------------------------
-  # JOB 2: SSH into EC2 and redeploy the container
-  # ---------------------------------------------------------
-  deploy:
-    name: Deploy to EC2
+  ech-vars-and-secrets:
+    name: 1 - Ech0 Variables and Secerts
     runs-on: ubuntu-latest
-    needs: build-and-push      # waits for job 1 to finish successfully first
-
+    environment: development
+    env:
+      MY_VARIABLE: ${{vars.MY_VARIABLE}}
+      My_SECRET: ${{secrets.My_SECRET}}
     steps:
-      - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}        # e.g. 35.172.229.109
-          username: ${{ secrets.EC2_USER }}    # ubuntu, on your instance
-          key: ${{ secrets.EC2_SSH_KEY }}      # full contents of docker.pem
-          script: |
-            cd ~/Docker-Workshop2
-            docker compose pull
-            docker compose up -d --remove-orphans
-            docker image prune -f    # cleans up old dangling images after each deploy
+      -name: Echo repository variable
+      -run: echo "MY_VARIABLE: $MY_VARIABLE"
 
-            # This assumes docker-compose.yaml's "image:" lines point at
-            #   shamirmaharjan/mern-server-deploy:latest
-            #   shamirmaharjan/mern-client-deploy:latest
-            # (same repos this workflow just pushed to).
-            # If compose currently pins ":v1" instead of ":latest", update
-            # those two lines in docker-compose.yaml on the server once —
-            # after that, every push to main will pull the freshest build.
+      -name: Echo repository secret (value of this is marked as *** in logs)
+      -run: echo "My_SECRET: $My_SECRET"
+      
