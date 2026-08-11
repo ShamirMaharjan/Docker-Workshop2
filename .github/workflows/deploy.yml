@@ -7,15 +7,15 @@ on:
 
 jobs:
   ech-vars-and-secrets:
-    name: 1 - Ech0 Variables and Secerts
+    name: 1 - Echo Variables and Secrets
     runs-on: ubuntu-latest
     environment: development
     env:
-      MY_VARIABLE: ${{vars.MY_VARIABLE}}
-      My_SECRET: ${{secrets.My_SECRET}}
+      MY_VARIABLE: ${{ vars.MY_VARIABLE }}
+      MY_SECRET: ${{ secrets.MY_SECRET }}
     steps:
-      -name: Echo repository variable
-      -run: echo "MY_VARIABLE= $MY_VARIABLE"
+      - name: Echo repository variable
+        run: echo "MY_VARIABLE= $MY_VARIABLE"
 
-      -name: Echo repository secret (value of this is marked as *** in logs)
-      -run: echo "My_SECRET= $My_SECRET"
+      - name: Echo repository secret (value of this is marked as *** in logs)
+        run: echo "MY_SECRET= $MY_SECRET"
