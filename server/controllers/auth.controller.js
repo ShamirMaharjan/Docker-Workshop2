@@ -26,6 +26,7 @@ const registerUser = async (req, res) => {
             email,
             password: hashedPassword
         });
+        
 
         if (user) {
             generateToken(res, user._id);
@@ -49,6 +50,8 @@ const loginUser = async (req, res) => {
             return res.status(404).json({ message: "User not found. " });
         }
 
+        const isGoogleUser = !!user.googleId;
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials. " });
@@ -64,6 +67,7 @@ const loginUser = async (req, res) => {
         res.status(500).json({ message: "Server error during login. ", error });
     }
 };
+
 
 // google login
 const googleLogin = async (req, res) => {

@@ -1,0 +1,100 @@
+name: CI/CD - Build, Push, Deploy
+
+# --- EVENT: what triggers this workflow ---
+on:
+  push:
+    branches: [main]        # runs every time you push to main
+  workflow_dispatch:        # also lets you trigger it manually from the Actions tab
+
+# --- Values reused across jobs/steps ---
+env:
+  SERVER_IMAGE: mern-server
+  CLIENT_IMAGE: mern-client
+  SERVER_CONTAINER: mern-server
+  CLIENT_CONTAINER: mern-client
+
+jobs:
+  # ---------------------------------------------------------
+  # JOB 1: Build the Docker images (client + server) and push
+  #        both to Docker Hub. Uses a "matrix" so both builds
+  #        run in parallel on their own runner.
+  # ---------------------------------------------------------
+  build-and-push:
+    name: Build & Push (${{ matrix.service }})
+    runs-on: ubuntu-latest        # hosted runner: a fresh Ubuntu VM
+
+    strategy:
+      matrix:
+        # each entry below spins up its own copy of this job
+        include:
+          - service: server
+            context: ./server
+            image: mern-server
+          - service: client
+            context: ./client
+            image: mern-client
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        # pulls your repo's code onto the runner, since the runner starts empty
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        # DOCKERHUB_TOKEN = an access token (not your real password),
+        # generated at hub.docker.com -> Account Settings -> Security
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        # enables more efficient/cached multi-platform builds
+
+      - name: Build and push ${{ matrix.service }} image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.context }}       # ./server or ./client
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:latest
+
+  # ---------------------------------------------------------
+  # JOB 2: SSH into EC2 and redeploy the container
+  # ---------------------------------------------------------
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    needs: build-and-push      # waits for job 1 to finish successfully first
+
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}        # e.g. 35.172.229.109
+          username: ${{ secrets.EC2_USER }}    # e.g. ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}      # full contents of docker.pem
+          script: |
+            # ---- SERVER ----
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SERVER_IMAGE }}:latest
+            docker stop ${{ env.SERVER_CONTAINER }} || true
+            docker rm ${{ env.SERVER_CONTAINER }} || true
+            docker run -d \
+              --name ${{ env.SERVER_CONTAINER }} \
+              --env-file /home/${{ secrets.EC2_USER }}/.env \
+              -p 5000:5000 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SERVER_IMAGE }}:latest
+
+            # ---- CLIENT ----
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CLIENT_IMAGE }}:latest
+            docker stop ${{ env.CLIENT_CONTAINER }} || true
+            docker rm ${{ env.CLIENT_CONTAINER }} || true
+            docker run -d \
+              --name ${{ env.CLIENT_CONTAINER }} \
+              -p 5173:5173 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CLIENT_IMAGE }}:latest
+
+            # NOTE: if you'd rather manage both containers together, and your
+            # docker-compose.yaml on the EC2 box already references these two
+            # image names, you can replace all of the above with just:
+            #   docker compose pull
+            #   docker compose up -d --remove-orphans
