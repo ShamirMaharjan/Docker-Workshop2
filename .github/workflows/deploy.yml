@@ -1,4 +1,4 @@
-name: CI/CD - Build, Push, Deploy
+name: CI/CD - Build, Push, Deploy.
 
 # --- EVENT: what triggers this workflow ---
 on:
