@@ -15,8 +15,7 @@ jobs:
       My_SECRET: ${{secrets.My_SECRET}}
     steps:
       -name: Echo repository variable
-      -run: echo "MY_VARIABLE: $MY_VARIABLE"
+      -run: echo "MY_VARIABLE= $MY_VARIABLE"
 
       -name: Echo repository secret (value of this is marked as *** in logs)
-      -run: echo "My_SECRET: $My_SECRET"
-      
+      -run: echo "My_SECRET= $My_SECRET"
