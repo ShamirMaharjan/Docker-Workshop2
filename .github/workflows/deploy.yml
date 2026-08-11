@@ -8,10 +8,8 @@ on:
 
 # --- Values reused across jobs/steps ---
 env:
-  SERVER_IMAGE: mern-server
-  CLIENT_IMAGE: mern-client
-  SERVER_CONTAINER: mern-server
-  CLIENT_CONTAINER: mern-client
+  SERVER_IMAGE: mern-server-deploy
+  CLIENT_IMAGE: mern-client-deploy
 
 jobs:
   # ---------------------------------------------------------
@@ -29,10 +27,10 @@ jobs:
         include:
           - service: server
             context: ./server
-            image: mern-server
+            image: mern-server-deploy
           - service: client
             context: ./client
-            image: mern-client
+            image: mern-client-deploy
 
     steps:
       - name: Checkout code
@@ -71,30 +69,18 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}        # e.g. 35.172.229.109
-          username: ${{ secrets.EC2_USER }}    # e.g. ec2-user
+          username: ${{ secrets.EC2_USER }}    # ubuntu, on your instance
           key: ${{ secrets.EC2_SSH_KEY }}      # full contents of docker.pem
           script: |
-            # ---- SERVER ----
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SERVER_IMAGE }}:latest
-            docker stop ${{ env.SERVER_CONTAINER }} || true
-            docker rm ${{ env.SERVER_CONTAINER }} || true
-            docker run -d \
-              --name ${{ env.SERVER_CONTAINER }} \
-              --env-file /home/${{ secrets.EC2_USER }}/.env \
-              -p 5000:5000 \
-              ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SERVER_IMAGE }}:latest
+            cd ~/Docker-Workshop2
+            docker compose pull
+            docker compose up -d --remove-orphans
+            docker image prune -f    # cleans up old dangling images after each deploy
 
-            # ---- CLIENT ----
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CLIENT_IMAGE }}:latest
-            docker stop ${{ env.CLIENT_CONTAINER }} || true
-            docker rm ${{ env.CLIENT_CONTAINER }} || true
-            docker run -d \
-              --name ${{ env.CLIENT_CONTAINER }} \
-              -p 5173:5173 \
-              ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CLIENT_IMAGE }}:latest
-
-            # NOTE: if you'd rather manage both containers together, and your
-            # docker-compose.yaml on the EC2 box already references these two
-            # image names, you can replace all of the above with just:
-            #   docker compose pull
-            #   docker compose up -d --remove-orphans
+            # This assumes docker-compose.yaml's "image:" lines point at
+            #   shamirmaharjan/mern-server-deploy:latest
+            #   shamirmaharjan/mern-client-deploy:latest
+            # (same repos this workflow just pushed to).
+            # If compose currently pins ":v1" instead of ":latest", update
+            # those two lines in docker-compose.yaml on the server once —
+            # after that, every push to main will pull the freshest build.
