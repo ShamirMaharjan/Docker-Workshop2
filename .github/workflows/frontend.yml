@@ -3,8 +3,8 @@ name: Frontend CI/CD
 on:
   workflow_dispatch:
   push:
-  branches: [main]
-  paths: ['client/**']
+    branches: [main]
+    paths: ['client/**']
 
 jobs:
   client-build-and-push:
