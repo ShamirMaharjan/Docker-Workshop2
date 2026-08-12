@@ -1,21 +1,21 @@
-name: Build basic job demo
+# name: Build basic job demo
 
-on:
-  workflow_dispatch:
-  push:
-    branches: [main]
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches: [main]
 
-jobs:
-  echo-vars-and-secrets:
-    name: 1 - Echo Variables and Secrets
-    runs-on: ubuntu-latest
-    environment: development
-    env:
-      MY_VARIABLE: ${{ vars.MY_VARIABLE }}
-      MY_SECRET: ${{ secrets.MY_SECRET }}
-    steps:
-      - name: Echo repository variable
-        run: echo "MY_VARIABLE= $MY_VARIABLE"
+# jobs:
+#   echo-vars-and-secrets:
+#     name: 1 - Echo Variables and Secrets
+#     runs-on: ubuntu-latest
+#     environment: development
+#     env:
+#       MY_VARIABLE: ${{ vars.MY_VARIABLE }}
+#       MY_SECRET: ${{ secrets.MY_SECRET }}
+#     steps:
+#       - name: Echo repository variable
+#         run: echo "MY_VARIABLE= $MY_VARIABLE"
 
-      - name: Echo repository secret (value of this is marked as *** in logs)
-        run: echo "MY_SECRET= $MY_SECRET"
+#       - name: Echo repository secret (value of this is marked as *** in logs)
+#         run: echo "MY_SECRET= $MY_SECRET"
