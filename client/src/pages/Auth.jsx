@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ChevronRight, Shield, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-// dsdsadsdsada
+// dsdsadsdsadafd
 
 export default function Auth() {
     const [isLogin, setIsLogin] = useState(true);
