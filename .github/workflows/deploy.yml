@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 jobs:
-  ech-vars-and-secrets:
+  echo-vars-and-secrets:
     name: 1 - Echo Variables and Secrets
     runs-on: ubuntu-latest
     environment: development

@@ -1,0 +1,59 @@
+name: Backend CI/CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    path: ['server/**']
+
+jobs:
+#   build-and-push:
+#   name:
+#     sever-build-and-push
+#   runs-on: ubuntu-latest
+#   steps:
+#     -uses: actions/checkout@v4  # It uses the official checkout GitHub Action to download/checkout your repository's code into the GitHub Actions runner.
+# # Think of the runner as a temporary Ubuntu machine, Without checkout, your runner generally doesn't have your repository files available for the following commands. 
+#     -name: Log in to Docker Hub
+#      run: echo "${{secrets.DOCKERHUB_TOKEN}}" | 
+#           docker login -u "${{secrets.DOCKERHUB_USERNAME}}" --password-stdin
+      
+#     -name: build the image
+#      run: docker build -t ${{secrets.DOCKERHUB_USERNAME}}/mern-server-deploy:v1 ./server
+
+#     -name: Push the image
+#      run: docker push ${{secrets.DOCKERHUB_USERNAME}}/mern-server-deploy:v1
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      -uses: action/checkout@v4
+
+      -name: Build and Push
+       run:
+       bash scripts/build-and-push.sh
+       env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+          IMAGE: mern-server-deploy
+          CONTEXT: ./server
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+    -uses: actions/checkout@v4
+
+    -name: Deploy to Ec2
+
+     run: bash scripts/deploy.sh
+
+     env:
+     DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+     IMAGE: mern-server
+     CONTAINER: mern-server
+     PORT: 5000
+     EC2_HOST: ${{ secrets.EC2_HOST }}
+     EC2_USER: ${{ secrets.EC2_USER }}
+     EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}

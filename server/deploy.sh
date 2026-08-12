@@ -10,7 +10,7 @@ CONTAINER="mern-server"
 
 # --- connection details ---
 KEY="docker.pem"
-EC2_HOST="ec2-user@35.172.229.109"
+EC2_HOST="ec2-user@3.215.37.181"
 
 
 echo "Deploying $FULL_NAME to $EC2_HOST ..."
