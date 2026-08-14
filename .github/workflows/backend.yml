@@ -7,23 +7,6 @@ on:
     paths: ['server/**']
 
 jobs:
-#   build-and-push:
-#   name:
-#     sever-build-and-push
-#   runs-on: ubuntu-latest
-#   steps:
-#     -uses: actions/checkout@v4  # It uses the official checkout GitHub Action to download/checkout your repository's code into the GitHub Actions runner.
-# # Think of the runner as a temporary Ubuntu machine, Without checkout, your runner generally doesn't have your repository files available for the following commands. 
-#     -name: Log in to Docker Hub
-#      run: echo "${{secrets.DOCKERHUB_TOKEN}}" | 
-#           docker login -u "${{secrets.DOCKERHUB_USERNAME}}" --password-stdin
-      
-#     -name: build the image
-#      run: docker build -t ${{secrets.DOCKERHUB_USERNAME}}/mern-server-deploy:v1 ./server
-
-#     -name: Push the image
-#      run: docker push ${{secrets.DOCKERHUB_USERNAME}}/mern-server-deploy:v1
-
   build-and-push:
     runs-on: ubuntu-latest
     steps:
@@ -56,3 +39,4 @@ jobs:
         EC2_HOST: ${{ secrets.EC2_HOST }}
         EC2_USER: ${{ secrets.EC2_USER }}
         EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        MONGO_URI: ${{ secrets.MONGO_URI }}
