@@ -11,6 +11,8 @@ ssh -o StrictHostKeyChecking=accept-new -i key.pem \
  docker stop $CONTAINER 2>/dev/null || true
  docker rm $CONTAINER 2>/dev/null || true
  docker run -d --name $CONTAINER \
- --restart always -p $PORT:$PORT $FULL_NAME
+ --restart always -p $PORT:$PORT \
+ --env-file ~/Docker-Workshop2/server/.env \
+ $FULL_NAME
  "
 rm -f key.pem # never leave the key lying around
