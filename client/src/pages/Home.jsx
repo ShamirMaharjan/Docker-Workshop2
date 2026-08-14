@@ -35,7 +35,7 @@ export default function Home() {
     return (
         <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
             <h1>
-                hello world
+                hello world s333
             </h1>
             {/* hero */}
             <header className="relative pt-12 pb-16 lg:pb-24 overflow-hidden">
