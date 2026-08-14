@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { registerUser, loginUser, googleLogin, forgotPassword, resetPassword } = require('../controllers/auth.controller');
 const { authLimiter } = require('../middlewares/rateLimiter');
-//commentsssds
+//commentsssdsss
 
 router.post('/register', authLimiter, registerUser);
 router.post('/login', authLimiter, loginUser);
