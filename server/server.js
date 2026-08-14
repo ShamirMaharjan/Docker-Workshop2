@@ -12,9 +12,20 @@ const PORT = process.env.PORT;
 
 app.set('trust proxy', true);
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://shamir-todo.s3-website-us-east-1.amazonaws.com'
+];
+
 app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
 }));
 
 app.use(express.json());
