@@ -8,6 +8,19 @@ const api = axios.create({
     withCredentials: true
 });
 
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('todo_token');
+
+    if (token) {
+        config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${token}`,
+        };
+    }
+
+    return config;
+});
+
 export const useProfile = () => {
     const [profileData, setProfileData] = useState({ streak: 0, totalCleared: 0 });
     const [loading, setLoading] = useState(true);

@@ -29,9 +29,10 @@ const registerUser = async (req, res) => {
         
 
         if (user) {
-            generateToken(res, user._id);
+            const token = generateToken(res, user._id);
             res.status(201).json({
                 message: "Account created successfully",
+                token,
                 user: { id: user._id, name: user.name, email: user.email }
             });
         }
@@ -57,10 +58,11 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: "Invalid credentials. " });
         }
 
-        generateToken(res, user._id);
+        const token = generateToken(res, user._id);
 
         res.status(200).json({
             message: "Logged in successfully",
+            token,
             user: { id: user._id, name: user.name, email: user.email }
         });
     } catch (error) {
@@ -99,10 +101,11 @@ const googleLogin = async (req, res) => {
             });
         }
 
-        generateToken(res, user._id);
+        const token = generateToken(res, user._id);
 
         res.status(200).json({
             message: "Google login successful",
+            token,
             user: { id: user._id, name: user.name, email: user.email }
         });
     } catch (error) {

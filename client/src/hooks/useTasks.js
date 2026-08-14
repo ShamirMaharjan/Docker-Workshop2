@@ -7,6 +7,19 @@ const api = axios.create({
     withCredentials: true 
 });
 
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('todo_token');
+
+    if (token) {
+        config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${token}`,
+        };
+    }
+
+    return config;
+});
+
 export const useTasks = () => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);

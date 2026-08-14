@@ -21,12 +21,14 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         const res = await api.post('/auth/login', { email, password });
+        if (res.data.token) localStorage.setItem('todo_token', res.data.token);
         setUser(res.data.user);
         localStorage.setItem('todo_user', JSON.stringify(res.data.user));
     };
 
     const register = async (name, email, password) => {
         const res = await api.post('/auth/register', { name, email, password });
+        if (res.data.token) localStorage.setItem('todo_token', res.data.token);
         setUser(res.data.user);
         localStorage.setItem('todo_user', JSON.stringify(res.data.user));
     };
@@ -34,6 +36,7 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setUser(null);
         localStorage.removeItem('todo_user');
+        localStorage.removeItem('todo_token');
     };
 
     const updateUser = (updatedUserData) => {
@@ -43,6 +46,7 @@ export const AuthProvider = ({ children }) => {
 
     const googleLogin = async (credential) => {
         const res = await api.post('/auth/google', { credential });
+        if (res.data.token) localStorage.setItem('todo_token', res.data.token);
         setUser(res.data.user);
         localStorage.setItem('todo_user', JSON.stringify(res.data.user));
     };
