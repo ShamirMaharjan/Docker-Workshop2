@@ -25,6 +25,8 @@ jobs:
       - name: Build
         working-directory: ./client
         run: npm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Deploy to S3
         run: bash scripts/deploy-s3.sh
