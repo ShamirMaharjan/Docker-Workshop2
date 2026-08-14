@@ -34,7 +34,7 @@ jobs:
       env:
         DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         IMAGE: mern-server
-        CONTAINER: mern-server
+        CONTAINER: mern-server-1
         PORT: 5001
         EC2_HOST: ${{ secrets.EC2_HOST }}
         EC2_USER: ${{ secrets.EC2_USER }}
