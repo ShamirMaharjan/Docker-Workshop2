@@ -34,7 +34,9 @@ export default function Home() {
 
     return (
         <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-blue-100 selection:text-blue-900 overflow-x-hidden">
-
+            <h1>
+                hello world
+            </h1>
             {/* hero */}
             <header className="relative pt-12 pb-16 lg:pb-24 overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:24px_24px] opacity-60 -z-10"></div>
