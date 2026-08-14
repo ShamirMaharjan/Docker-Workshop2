@@ -10,7 +10,7 @@ const userRoutes = require('./routes/user.route');
 const app = express();
 const PORT = process.env.PORT;
 
-app.set('trust proxy', true);
+app.set('trust proxy', 1);
 
 const allowedOrigins = [
   'http://localhost:5173',
