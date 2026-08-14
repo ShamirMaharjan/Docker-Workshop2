@@ -8,9 +8,9 @@ const {
     updatePasswordWithOTP,
     deleteAccount
 } = require('../controllers/user.controller');
-// const { protect } = require('../middlewares/authMiddleware');
+const { protect } = require('../middlewares/authMiddleware');
 
-// router.use(protect);
+router.use(protect);
 
 router.get('/profile', getUserProfile);
 router.put('/profile/name', updateName);
