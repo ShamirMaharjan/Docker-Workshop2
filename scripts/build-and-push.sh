@@ -9,3 +9,5 @@ echo "Building $FULL_NAME from $CONTEXT ..."
 docker build -t "$FULL_NAME" "$CONTEXT"
 echo "Pushing $FULL_NAME ..."
 docker push "$FULL_NAME"
+docker logout 
+
